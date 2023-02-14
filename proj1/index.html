@@ -15,6 +15,7 @@
     <p class="center">Abdul Ali Khan, Zachary Zollman</p>
     
     <h2 class="center">Overview</h1>
+    
     This project gave us the opportunity to gain an understanding of how to implement various computer graphics concepts such as rasterization, supersampling, texture mapping, and level sampling. Through this project, we designed an efficient and robust algorithm to rasterize triangles by using bounding box checks. This involved initially checking the triangle against the bounding box to determine the region of coverage, then checking the individual samples within this bounding box to determine if the samples need to be filled or not. 
     <br></br>
     Implemented supersampling to give my algorithm the power to antialias the scene by utilizing multiple samples per pixel. By doing this, our algorithm was able to produce a smoother image that possessed much less aliasing and jaggies. In order to implement supersampling, we had to modify the rasterization pipeline by introducing a sample and accumulate step. This meant that individual samples needed to be accumulated and stored and that the integral of accumulated samples would be used to determine the final values for each pixel since the supersampling works by pushing the approximation error that exists for each sample
