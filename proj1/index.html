@@ -15,11 +15,57 @@
 
 		<!-- centered subheading -->
 		<h2 class="center">Task 1: Drawing Single-Color Triangles</h2>
+
+    To rasterize a triangle, we first find the bounding box of the triangle by calculating the minimum and maximum x and y values of the three vertices. Then we iterate through each pixel in the bounding box and perform a three-line test to check if the pixel is inside the triangle. If the pixel is inside the triangle, we fill the pixel with the specified color.
+
+    <br></br>
+    The three-line test involves calculating the signed areas of three sub-triangles formed by the pixel and two vertices of the triangle. If the signed areas have the same sign, then the pixel is inside the triangle. We also add a half-pixel offset to the coordinates when filling the pixel to ensure that the pixel is correctly centered within the bounding box. This is the basic approach to triangle rasterization without supersampling.
+
+    <code>
+      <br>
+      // TODO: Task 1: Implement basic triangle rasterization here, no supersampling<br>
+      <br>
+      
+   // find the bounding box of the triangle<br>
+   int minX = min(x0, min(x1, x2));<br>
+   int maxX = max(x0, max(x1, x2));<br>
+   int minY = min(y0, min(y1, y2));<br>
+   int maxY = max(y0, max(y1, y2));<br>
+
+
+   // iterate through the bounding box<br>
+   for (int x = minX; x <= maxX; x++)<br>
+   {<br>
+     for (int y = minY; y <= maxY; y++)<br>
+     {<br>
+
+
+       //three line test to see if the point is inside the triangle<br>
+       float d1 = (x - x1) * (y0 - y1) - (x0 - x1) * (y - y1);<br>
+       float d2 = (x - x2) * (y1 - y2) - (x1 - x2) * (y - y2);<br>
+       float d3 = (x - x0) * (y2 - y0) - (x2 - x0) * (y - y0);<br>
+      
+       // if the point is inside the triangle, fill the pixel<br>
+       if ((d1 >= 0 && d2 >= 0 && d3 >= 0) || (d1 <= 0 && d2 <= 0 && d3 <= 0))<br>
+       {<br>
+         fill_pixel(x + 0.5, y + 0.5, color);<br>
+       }<br>
+     }<br>
+   }<br>
+    </code>
+
+    The given algorithm uses a bounding box to define the potential area of the triangle and iterates through each pixel within the bounding box to determine whether it is inside or outside of the triangle. As such, it covers every pixel within the bounding box, and therefore, it can't miss any pixels inside the triangle.
+Therefore, the given algorithm is no worse than one that checks each sample within the bounding box of the triangle, and it provides a reasonable trade-off between computational efficiency and accuracy.
+<br><br>
+    TODO: image
+
 		<h2 class="center">Task 2: Antialiasing by Supersampling</h2>
 		<h2 class="center">Task 3: Transforms</h2>
 		<h2 class="center">Task 4: Barycentric coordinates</h2>
 		<h2 class="center">Task 5: "Pixel sampling" for texture mappings</h2>
 		<h2 class="center">Task 6: "Level sampling" with mipmaps for texture mapping</h2>
+
+    Link to write-up: <a href="https://zacharyzollman.github.io/cs184-proj-webpage/proj1/index.html">https://zacharyzollman.github.io/cs184-proj-webpage/proj1/index.html</a>
     </main>
 	<script src="index.js"></script>
   </body>
