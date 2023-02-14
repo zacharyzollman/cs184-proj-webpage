@@ -10,8 +10,19 @@
   </head>
   <body>
     <main>
-		<h1 class="center">Project 1: Rasterizer</h1>
-		<p class="center">Abdul Ali Khan, Zachary Zollman</p>
+
+    <h1 class="center">Project 1: Rasterizer</h1>
+    <p class="center">Abdul Ali Khan, Zachary Zollman</p>
+    
+    <h2 class="center">Overview</h1>
+    This project gave us the opportunity to gain an understanding of how to implement various computer graphics concepts such as rasterization, supersampling, texture mapping, and level sampling. Through this project, we designed an efficient and robust algorithm to rasterize triangles by using bounding box checks. This involved initially checking the triangle against the bounding box to determine the region of coverage, then checking the individual samples within this bounding box to determine if the samples need to be filled or not. 
+    <br></br>
+    Implemented supersampling to give my algorithm the power to antialias the scene by utilizing multiple samples per pixel. By doing this, our algorithm was able to produce a smoother image that possessed much less aliasing and jaggies. In order to implement supersampling, we had to modify the rasterization pipeline by introducing a sample and accumulate step. This meant that individual samples needed to be accumulated and stored and that the integral of accumulated samples would be used to determine the final values for each pixel since the supersampling works by pushing the approximation error that exists for each sample
+    <br></br>
+    We also implemented barycentric coordinates and texture mapping with pixel sampling and level sampling. Utilizing barycentric coordinates, we were able to determine which pixels lie within a triangle and assign them a value based on the relative distance from each of the triangle's vertices. Texture mapping was then used to apply texture information to a triangle. This was accomplished by implementing two different pixel sampling techniques: nearest and bilinear. Nearest will take the closest texel to the sample point and use that as the color while bilinear will interpolate between four texels to determine the sample's color value. Level sampling was also used, as it is a more hardware-friendly implementation which minimizes memory bandwidth usage by taking a group of adjacent texels and sampling from those instead of sampling from all texels.
+    <br></br>
+    Overall, this project was a great learning experience. We were able to gain hands-on experience with computer graphics concepts such as rasterization, transformation, lighting, and texture mapping. We learned various algorithms such as bounding box checks and supersampling for antialiasing and implemented them into our own algorithms. In addition, we delved deeper into pixel sampling as well as level sampling and understood the tradeoffs between the different methods when it
+    <br></br>
 
 		<h2 class="center">Task 1: Drawing Single-Color Triangles</h2>
 
@@ -19,6 +30,10 @@
 
     <br></br>
     The three-line test involves calculating the signed areas of three sub-triangles formed by the pixel and two vertices of the triangle. If the signed areas have the same sign, then the pixel is inside the triangle. We also add a half-pixel offset to the coordinates when filling the pixel to ensure that the pixel is correctly centered within the bounding box. This is the basic approach to triangle rasterization without supersampling.
+    <br></br>
+    <img src="three-line-1.png" width="700">
+    <img src="three-line-2.png" width="700">
+
 
     <code>
       <br>
@@ -54,7 +69,7 @@
     </code>
 
     The given algorithm uses a bounding box to define the potential area of the triangle and iterates through each pixel within the bounding box to determine whether it is inside or outside of the triangle. As such, it covers every pixel within the bounding box, and therefore, it can't miss any pixels inside the triangle.
-Therefore, the given algorithm is no worse than one that checks each sample within the bounding box of the triangle, and it provides a reasonable trade-off between computational efficiency and accuracy.
+    Therefore, the given algorithm is no worse than one that checks each sample within the bounding box of the triangle, and it provides a reasonable trade-off between computational efficiency and accuracy.
 <br><br>
     <img src="task1.png" width="700">
 
@@ -73,6 +88,41 @@ Therefore, the given algorithm is no worse than one that checks each sample with
 
 
 		<h2 class="center">Task 3: Transforms</h2>
+    In order to rotate and scale the object we use matrix operations to manipulate x and y-offset
+    <img src="linear-transforms.png" width="700">
+    <img src="rotation-transforms.png" width="700">
+
+    <br><br>
+    Using the slides from class as a guide we created the code below:
+    <code>
+  Matrix3x3 translate(float dx, float dy)<br>
+	{<br>
+		// Part 3: Fill this in.<br>
+		return Matrix3x3(1, 0, dx,<br>
+						 0, 1, dy,<br>
+						 0, 0, 1);<br>
+	}<br>
+  <br><br>
+	Matrix3x3 scale(float sx, float sy)<br>
+	{<br>
+		// Part 3: Fill this in.<br>
+		return Matrix3x3(sx, 0, 0,<br>
+						 0, sy, 0,<br>
+						 0, 0, 1);<br>
+	}<br>
+
+  Matrix3x3 rotate(float deg)<br>
+	{<br>
+		// Part 3: Fill this in.<br>
+		float rad = deg * PI / 180;<br>
+		return Matrix3x3(cos(rad), -sin(rad), 0,<br>
+						 sin(rad), cos(rad), 0,<br>
+						 0, 0, 1);<br>
+	}<br>
+
+  <br><br>
+
+    <code>
 
     <img src="task3.png" width="700">
     <br><br>
@@ -98,6 +148,17 @@ Therefore, the given algorithm is no worse than one that checks each sample with
     <p>Therefore, we have proved that if P=(α,β,γ), where α+β+γ=1, and A, B, C each has an associated value, then P=αA+βB+γC.</p>
 
     <br><br>
+    <code>
+      float d1 = (ix - x1) * (y0 - y1) - (x0 - x1) * (jy - y1);<br>
+      float d2 = (ix - x2) * (y1 - y2) - (x1 - x2) * (jy - y2);<br>
+      float d3 = (ix - x0) * (y2 - y0) - (x2 - x0) * (jy - y0);<br>
+      <br><br>
+      if ((d1 >= 0 && d2 >= 0 && d3 >= 0) || (d1 <= 0 && d2 <= 0 && d3 <= 0))<br>
+      {<br>
+        sample_buffer[(j * width + i) * sample_rate + m * ::floor(sqrt(rate)) + n] = color;<br>
+      }<br>
+    <code>
+
 
     <img src="task4.png" width="700">
 
