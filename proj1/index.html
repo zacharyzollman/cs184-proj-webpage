@@ -60,8 +60,31 @@ Therefore, the given algorithm is no worse than one that checks each sample with
     TODO: image
 
 		<h2 class="center">Task 2: Antialiasing by Supersampling</h2>
+
+    Supersampling involves sampling your model multiple times per pixel, rather than just once per pixel. This is useful because it can reduce undesired behaviors that arise from sampling only once per sample, such as jaggies. By sampling multiple times, we can select a more representative pixel color. In particular, on edges, we can average the triangle color with the background/surrounding color. Thus, there isn’t a triangle present/triangle absent binary, but rather a gradual transition between the triangle’s color and its surroundings.<br>
+    In order to antialias our triangles, we increased the size of our sample buffer so that we could store one color per sample. In order to achieve this, we modified the sample_buffer.resize() calls in set_sample_rate and set_framebuffer_target to set the size to width * height * sample_rate. We also modified the rasterize_triangle function to be able to sample multiple points within the given pixel. The samples are evenly spaced in a sort of mini-grid within the grid of pixels. As we move through the grids using for loops, we set the color in the sample buffer to be the triangle color if it is within the triangle. We modified resolve_to_framebuffer so that it could take in multiple sample colors from the sample buffer to determine a single pixel color. Specifically, we averaged the color values. This involved summing the RGB values for each color and dividing by the number of colors. We implemented supersampling for triangles, but we still wanted lines and points to render appropriately, so we modified fill_pixel to fill all corresponding samples in the sample buffer with the desired color. That way, when the corresponding samples were averaged to determine the color for the pixel, they averaged to the desired color.
+
+    <br><br>
+    TODO: image
+
 		<h2 class="center">Task 3: Transforms</h2>
+
+    TODO: image
+    <br><br>
+    The cubeman is mid-somersault, trying to get into a handstand to then swing his legs around underneath himself. I have changed the body color by adding blue tiles to give him more motion.
+
 		<h2 class="center">Task 4: Barycentric coordinates</h2>
+
+    TODO: triangle image
+    <br><br>
+    Barycentric coordinates are a way to represent a point inside a triangle as a linear combination of the triangle's vertices. The coordinates are determined by computing the ratios of the areas of three smaller triangles formed by the point and each of the triangle's edges, to the area of the entire triangle. These ratios represent the weights assigned to each vertex to calculate the position of the point. 
+    <br><br>
+    Barycentric coordinates are simply a set of numbers that describe a linear combination of vertices of a given triangle.
+    For △ABC, if P=(α,β,γ), where α+β+γ=1, and A, B, C each has an associated value, then P=αA+βB+γC
+    
+    <br><br>
+    TODO: color wheel image
+
 		<h2 class="center">Task 5: "Pixel sampling" for texture mappings</h2>
 		<h2 class="center">Task 6: "Level sampling" with mipmaps for texture mapping</h2>
 
