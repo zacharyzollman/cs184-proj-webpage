@@ -36,37 +36,38 @@
     <img src="three-line-1.jpeg" width="300">
     <img src="three-line-2.jpeg" width="350">
 
+    <pre class="line-numbers">
+      <code class="language-clike">      
+        
+        // TODO: Task 1: Implement basic triangle rasterization here, no supersampling<br>
+        // find the bounding box of the triangle
+        int minX = min(x0, min(x1, x2));
+        int maxX = max(x0, max(x1, x2));
+        int minY = min(y0, min(y1, y2));
+        int maxY = max(y0, max(y1, y2));
+   
+        // iterate through the bounding box
+        for (int x = minX; x &lt;= maxX; x++)
+        {
+          for (int y = minY; y &lt;= maxY; y++)
+          {
+   
+            //three line test to see if the point is inside the triangle
+            float d1 = (x - x1) * (y0 - y1) - (x0 - x1) * (y - y1);
+            float d2 = (x - x2) * (y1 - y2) - (x1 - x2) * (y - y2);
+            float d3 = (x - x0) * (y2 - y0) - (x2 - x0) * (y - y0);
+   
+            // if the point is inside the triangle, fill the pixel
+            if ((d1 &gt;= 0 &amp;&amp; d2 &gt;= 0 &amp;&amp; d3 &gt;= 0) || (d1 &lt;= 0 &amp;&amp; d2 &lt;= 0 &amp;&amp; d3 &lt;= 0))
+            {
+              fill_pixel(x + 0.5, y + 0.5, color);
+            }
+          }
+        }
+      </code>
+   </pre>
 
-    <code>
-      <br>
-      // TODO: Task 1: Implement basic triangle rasterization here, no supersampling<br>
-      <br>
-      
-      // find the bounding box of the triangle<br>
-      int minX = min(x0, min(x1, x2));<br>
-      int maxX = max(x0, max(x1, x2));<br>
-      int minY = min(y0, min(y1, y2));<br>
-      int maxY = max(y0, max(y1, y2));<br>
-
-
-      // iterate through the bounding box<br>
-      for (int x = minX; x <= maxX; x++)<br>
-        {<br>
-          for (int y = minY; y <= maxY; y++)<br>
-          {<br>
-            //three line test to see if the point is inside the triangle<br>
-            float d1 = (x - x1) * (y0 - y1) - (x0 - x1) * (y - y1);<br>
-            float d2 = (x - x2) * (y1 - y2) - (x1 - x2) * (y - y2);<br>
-            float d3 = (x - x0) * (y2 - y0) - (x2 - x0) * (y - y0);<br>
-      
-            // if the point is inside the triangle, fill the pixel<br>
-            if ((d1 >= 0 && d2 >= 0 && d3 >= 0) || (d1 <= 0 && d2 <= 0 && d3 <= 0))<br>
-            {<br>
-              fill_pixel(x + 0.5, y + 0.5, color);<br>
-            }<br>
-         }<br>
-       }<br>
-    </code>
+    
 
     The given algorithm uses a bounding box to define the potential area of the triangle and iterates through each pixel within the bounding box to determine whether it is inside or outside of the triangle. As such, it covers every pixel within the bounding box, and therefore, it can't miss any pixels inside the triangle.
     Therefore, the given algorithm is no worse than one that checks each sample within the bounding box of the triangle, and it provides a reasonable trade-off between computational efficiency and accuracy.
@@ -93,34 +94,36 @@
     <img src="rotation-transforms.png" width="300">
 
     <br><br>
-    Using the slides from class as a guide we created the code below:
-    <!-- <code>
-  Matrix3x3 translate(float dx, float dy)<br>
-	{<br>
-		// Part 3: Fill this in.<br>
-		return Matrix3x3(1, 0, dx,<br>
-						 0, 1, dy,<br>
-						 0, 0, 1);<br>
-	}<br>
-  <br><br>
-	Matrix3x3 scale(float sx, float sy)<br>
-	{<br>
-		// Part 3: Fill this in.<br>
-		return Matrix3x3(sx, 0, 0,<br>
-						 0, sy, 0,<br>
-						 0, 0, 1);<br>
-	}<br>
-
-  Matrix3x3 rotate(float deg)<br>
-	{<br>
-		// Part 3: Fill this in.<br>
-		float rad = deg * PI / 180;<br>
-		return Matrix3x3(cos(rad), -sin(rad), 0,<br>
-						 sin(rad), cos(rad), 0,<br>
-						 0, 0, 1);<br>
-	}<br>
-
-  <br><br>
+    <pre class="line-numbers">
+      <code class="language-clike">    
+      Using the slides from class as a guide we created the code below:
+      Matrix3x3 translate(float dx, float dy)
+      {
+        // Part 3: Fill this in.
+        return Matrix3x3(1, 0, dx,
+                0, 1, dy,
+                0, 0, 1);
+      }
+    
+      Matrix3x3 scale(float sx, float sy)
+      {
+        // Part 3: Fill this in.
+        return Matrix3x3(sx, 0, 0,
+                0, sy, 0,
+                0, 0, 1);
+      }
+    
+      // The input argument is in degrees counterclockwise
+      Matrix3x3 rotate(float deg)
+      {
+        // Part 3: Fill this in.
+        float rad = deg * PI / 180;
+        return Matrix3x3(cos(rad), -sin(rad), 0,
+                sin(rad), cos(rad), 0,
+                0, 0, 1);
+      } 
+      </code>
+    </pre>
 
 <code> -->
 
