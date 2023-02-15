@@ -43,7 +43,7 @@
     <pre class="line-numbers">
       <code class="language-clike">      
         
-        // TODO: Task 1: Implement basic triangle rasterization here, no supersampling<br>
+        // Task 1: Implement basic triangle rasterization here, no supersampling<br>
         // find the bounding box of the triangle
         int minX = min(x0, min(x1, x2));
         int maxX = max(x0, max(x1, x2));
@@ -81,9 +81,9 @@
 
 		<h2>Task 2: Antialiasing by Supersampling</h2>
 
-    Supersampling involves sampling your model multiple times per pixel, rather than just once per pixel. This is useful because it can reduce undesired behaviors that arise from sampling only once per sample, such as jaggies. By sampling multiple times, we can select a more representative pixel color. In particular, on edges, we can average the triangle color with the background/surrounding color. Thus, there isn’t a triangle present/triangle absent binary, but rather a gradual transition between the triangle’s color and its surroundings.<br>
+    Supersampling involves sampling a model multiple times per pixel, rather than just once per pixel. This is useful because it can reduce undesired behaviors that arise from sampling only once per sample, such as jaggies. By sampling multiple times, we can select a more representative pixel color. In particular, on edges, we can average the triangle color with the background/surrounding color. Thus, there isn’t as much of a sudden cutoff, but rather a gradual transition between the triangle’s color and its surroundings.<br>
     <br><br>
-    In order to antialias our triangles, we increased the size of our sample buffer so that we could store one color per sample. In order to achieve this, we modified the <code>sample_buffer.resize()</code> calls in <code>set_sample_rate</code> and <code>set_framebuffer_target</code> to set the size to <code>width * height * sample_rate</code>. We also modified the <code>rasterize_triangle</code> function to be able to sample multiple points within the given pixel. The samples are evenly spaced in a sort of mini-grid within the grid of pixels. As we move through the grids using for loops, we set the color in the sample buffer to be the triangle color if it is within the triangle. We modified <code>resolve_to_framebuffer</code> so that it could take in multiple sample colors from the sample buffer to determine a single pixel color. Specifically, we averaged the color values. This involved summing the RGB values for each color and dividing by the number of colors. We implemented supersampling for triangles, but we still wanted lines and points to render appropriately, so we modified <code>fill_pixel</code> to fill all corresponding samples in the sample buffer with the desired color. That way, when the corresponding samples were averaged to determine the color for the pixel, they averaged to the desired color.
+    In order to antialias our triangles, we increased the size of our sample buffer so that we could store the desired number of colors per pixel. In order to achieve this, we modified the <code>sample_buffer.resize()</code> calls in <code>set_sample_rate</code> and <code>set_framebuffer_target</code> to set the size to <code>width * height * sample_rate</code>. We also modified the <code>rasterize_triangle</code> function to be able to sample multiple points within the given pixel. The samples are evenly spaced in a sort of mini-grid within the grid of pixels. As we move through the grids using <code>for</code> loops, we set the color in the sample buffer to be the triangle color if it is within the triangle. We modified <code>resolve_to_framebuffer</code> so that it could take in multiple sample colors from the sample buffer to determine a single pixel color. Specifically, we averaged the color values. This involved summing the RGB values for each color and dividing by the number of colors. We implemented supersampling for triangles, but we still wanted lines and points to render appropriately, so we modified <code>fill_pixel</code> to fill all corresponding samples in the sample buffer with the desired color. That way, when the corresponding samples were averaged to determine the color for the pixel, they averaged to the desired color.
 
     <br><br>
     <img src="task1.png" width="650">
@@ -100,11 +100,12 @@
     <img src="rotation-transforms.png" width="350">
     <br><br>
 
-    Linear transformations are performed using matrices, and matrix rotation is performed using the sin and cos functions. In the code, the translate function creates a matrix that adds dx and dy, which represent the x and y-offset, to all elements of the matrix. The scale function creates a matrix that multiplies sx and sy, which represent the scale factors in the x and y direction, to all elements of the matrix. Finally, the rotate function creates a matrix that rotates an object by a certain degree using the sin and cos functions. All of these matrices can then be multiplied together to create a composite transformation matrix which can be used to scale, rotate, and translate an object.
+    Linear transformations are performed using matrices, and matrix rotation is performed using the sine and cosine functions. In the code, the <code>translate</code> function creates a matrix that adds dx and dy, which represent the x and y-offset, to all elements of the matrix. The <code>scale</code> function creates a matrix that multiplies sx and sy, which represent the scale factors in the x and y direction, to all elements of the matrix. Finally, the <code>rotate</code> function creates a matrix that rotates an object by a certain degree using the sine and cosine functions. All of these matrices can then be multiplied together to create a composite transformation matrix which can be used to scale, rotate, and translate an object.
+    <br><br>
+    Using the slides from class as a guide, we wrote the logic for the functions below:
     <br><br>
     <pre class="line-numbers">
-      <code class="language-clike">    
-      Using the slides from class as a guide we created the code below:
+      <code class="language-clike">
       Matrix3x3 translate(float dx, float dy)
       {
         // Part 3: Fill this in.
@@ -142,9 +143,9 @@
     <img src="barycentric-interpolation-triangle.png" width="650">
     
     <br><br>
-    Barycentric coordinates are a way to represent a point inside a triangle as a linear combination of the triangle's vertices. The coordinates are determined by computing the ratios of the areas of three smaller triangles formed by the point and each of the triangle's edges, to the area of the entire triangle. These ratios represent the weights assigned to each vertex to calculate the position of the point. 
+    Barycentric coordinates are a way to represent a point inside a triangle as a linear combination of the triangle's vertices. To understand how we compute these coordinates, you can imagine that we create lines between the point inside the triangle and the triangle's three vertices. This creates three smaller triangles within the triangle. Each vertex is associated with the smaller triangle that is across from it in the bigger triangle. Thus, the closer a vertex is to a point, the larger its corresponding triangle will be. We then compute the ratio of the area of each smaller triangle to the area of the entire triangle. In this system, a vertex that is closer to the point inside the triangle will get a larger ratio. These values represent the weights assigned to each vertex. If we do a weighted sum of the vertices (using these weights that we calculated), we will get the position of the point. This can be useful for color interpolation, because if we assign a color to each vertex, we can use barycentric coordinates to calculate a weighted sum of each color for each pixel inside the triangle. Thus, points closer to a vertex will have a color closer to the color associated with the vertex. This phenomenon is visible in the above image.
     <br><br>
-    Barycentric coordinates are simply a set of numbers that describe a linear combination of vertices of a given triangle.
+    Since barycentric coordinates are simply a set of numbers that describe a linear combination of vertices of a given triangle, we can also describe them symbolically.
     <br><br>
 
     
