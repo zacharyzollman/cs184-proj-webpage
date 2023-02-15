@@ -29,7 +29,7 @@
     <br></br>
     We also implemented texture mapping with pixel sampling and level sampling. Given a texture map, we were able to map color values onto pixels. This involved calculating the barycentric coordinates of a sample point on the rendered triangle, and then finding the corresponding point on the texture map by scaling the x-coordinate by the width of the texture map and the y-coordinate by the height of the texture map. We implemented two different pixel sampling techniques: nearest and bilinear. Nearest will take the closest texel to the sample point and use that as the color, while bilinear will interpolate between four texels to determine the sample's color value. Level sampling was also used so that our program could take advantage of mipmapping, a cost-effective antialiasing technique.
     <br></br>
-    Overall, this project was a great learning experience. We were able to gain hands-on experience with computer graphics concepts such as rasterization, transformation, lighting, and texture mapping. We learned various algorithms such as bounding box checks and supersampling for antialiasing and implemented them into our own algorithms. In addition, we delved deeper into pixel sampling as well as level sampling and understood the tradeoffs between the different methods when it
+    Overall, this project was a great learning experience. We were able to gain hands-on experience with computer graphics concepts such as rasterization, transformation, lighting, bounding box checks, and texture mapping. We got to implement antialiasing techniques (supersampling, pixel sampling, and level sampling), see them in action, and learn about different tradeoffs between them.
     <br></br>
 
 		<h2>Task 1: Drawing Single-Color Triangles</h2>
@@ -41,7 +41,11 @@
     <img src="three-line-2.jpeg" width="350">
     <br></br>
 
-    The Point-in-Triangle test is a simple method in computer graphics that is used to determine whether a given point lies within a given triangle. This test works by considering each line of the triangle and determining whether the point is above or below that line. If the point is above or on all three lines, then it is inside the triangle; if it is below any of the lines, then it is outside the triangle.  The test  calculates the signed areas of three sub-triangles formed by the pixel and two vertices of the triangle. If the signed areas have the same sign, then the pixel is inside the triangle. We also add a half-pixel offset to the coordinates when filling the pixel to ensure that the pixel is correctly centered within the bounding box. This is the basic approach to triangle rasterization without supersampling.
+    The Point-in-Triangle test is a simple method in computer graphics that is used to determine whether a given point lies within a given triangle. This test works by considering each line of the triangle and determining whether the point is above or below that line. If the point is above or on all three lines, then it is inside the triangle; if it is below any of the lines, then it is outside the triangle.  The test calculates the signed areas of three sub-triangles formed by the pixel and two vertices of the triangle. If the signed areas have the same sign, then the pixel is inside the triangle.
+    <br></br>
+    We also add a half-pixel offset to the coordinates when filling the pixel to ensure that the pixel is correctly centered within the bounding box.
+    <br></br>
+    This is the basic approach to triangle rasterization without supersampling.
 
     <pre class="line-numbers">
       <code class="language-clike">      
