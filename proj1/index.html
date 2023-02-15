@@ -41,6 +41,9 @@
     <br></br>
     <img src="three-line-1.jpeg" width="330">
     <img src="three-line-2.jpeg" width="350">
+    <br></br>
+
+    The Point-in-Triangle test is a simple method in computer graphics that is used to determine whether a given point lies within a given triangle. This test works by considering each line of the triangle and determining whether the point is above or below that line. If the point is above or on all three lines, then it is inside the triangle; if it is below any of the lines, then it is outside the triangle. 
 
     <pre class="line-numbers">
       <code class="language-clike">      
@@ -95,14 +98,18 @@
 
 
 		<h2>Task 3: Transforms</h2>
-    In order to rotate and scale the object we use matrix operations to manipulate x and y-offset
     <br><br>
-    
+    Linear transformations in computer graphics are changes made to an image or object in order to modify its size or position. These transformations can be mathematically represented by matrices; for example, a scaling transformation can be represented by a matrix that multiplies the coordinates of each point on the object by a certain factor, and a translation transformation can be represented by a matrix that adds a certain value to the coordinates of each point. The advantage of using matrices to represent linear transformations is that they can be combined and applied to an object in a single operation, allowing complex transformations to be performed quickly and efficiently.
+    <br><br>
+
+    Rotation matrices use sine and cosine functions to rotate an object around a certain axis. A rotation matrix is defined as R = [[cos(θ), -sin(θ)], [sin(θ), cos(θ)]]. When multiplied by the coordinates of a point of an object, this matrix rotates the point by an angle θ around the origin. The sine and cosine of the angle θ are used to calculate the coefficients of the matrix, while the elements of the matrix indicate how the coordinates of the point should be scaled and offset in order to rotate the point by the desired angle.
+    <br><br>
+
     <img src="linear-transforms.png" width="350">
     <img src="rotation-transforms.png" width="350">
     <br><br>
 
-    Linear transformations are performed using matrices, and matrix rotation is performed using the sine and cosine functions. In the code, the <code>translate</code> function creates a matrix that adds dx and dy, which represent the x and y-offset, to all elements of the matrix. The <code>scale</code> function creates a matrix that multiplies sx and sy, which represent the scale factors in the x and y direction, to all elements of the matrix. Finally, the <code>rotate</code> function creates a matrix that rotates an object by a certain degree using the sine and cosine functions. All of these matrices can then be multiplied together to create a composite transformation matrix which can be used to scale, rotate, and translate an object.
+    In the code, the <code>translate</code> function creates a matrix that adds dx and dy, which represent the x and y-offset, to all elements of the matrix. The <code>scale</code> function creates a matrix that multiplies sx and sy, which represent the scale factors in the x and y direction, to all elements of the matrix. Finally, the <code>rotate</code> function creates a matrix that rotates an object by a certain degree using the sine and cosine functions. All of these matrices can then be multiplied together to create a composite transformation matrix which can be used to scale, rotate, and translate an object.
     <br><br>
     Using the slides from class as a guide, we wrote the logic for the functions below:
     <br><br>
@@ -180,6 +187,9 @@
 
 
     <img src="task4.png" width="650">
+    <br><br>
+    We encountered an issue where there was a white pixel at the center of the color wheel but it was resolved by adjusting the allowable gamma value to fill any carry over caused by floating point errors. This adjustment improved the accuracy of the color wheel and ensured the colors were displayed correctly. 
+    <br><br>
 
 		<h2>Task 5: "Pixel sampling" for texture mappings</h2>
 
