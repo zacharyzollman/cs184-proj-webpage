@@ -147,17 +147,21 @@
     <p>Therefore, we have proved that if P=(α,β,γ), where α+β+γ=1, and A, B, C each has an associated value, then P=αA+βB+γC.</p>
 
     <br><br>
-<!-- use pre and code -->
-<pre><code>
-  float d1 = (ix - x1) * (y0 - y1) - (x0 - x1) * (jy - y1);&lt;br&gt;
-  float d2 = (ix - x2) * (y1 - y2) - (x1 - x2) * (jy - y2);&lt;br&gt;
-  float d3 = (ix - x0) * (y2 - y0) - (x2 - x0) * (jy - y0);&lt;br&gt;
-  &lt;br&gt;&lt;br&gt;
-  if ((d1 &gt;= 0 &amp;&amp; d2 &gt;= 0 &amp;&amp; d3 &gt;= 0) || (d1 &lt;= 0 &amp;&amp; d2 &lt;= 0 &amp;&amp; d3 &lt;= 0))&lt;br&gt;
-  {&lt;br&gt;
-    sample_buffer[(j * width + i) * sample_rate + m * ::floor(sqrt(rate)) + n] = color;&lt;br&gt;
-  }&lt;br&gt;
-</code></pre>
+
+    <pre class="line-numbers">
+      <code class="language-c++">
+      float d1 = (ix - x1) * (y0 - y1) - (x0 - x1) * (jy - y1);<br>
+      float d2 = (ix - x2) * (y1 - y2) - (x1 - x2) * (jy - y2);<br>
+      float d3 = (ix - x0) * (y2 - y0) - (x2 - x0) * (jy - y0);<br>
+      <br><br>
+      if ((d1 &gt;= 0 &amp;&amp; d2 &gt;= 0 &amp;&amp; d3 &gt;= 0) || (d1 &lt;= 0 &amp;&amp; d2 &lt;= 0 &amp;&amp; d3 &lt;= 0))<br>
+      {<br>
+        sample_buffer[(j * width + i) * sample_rate + m * ::floor(sqrt(rate)) + n] = color;<br>
+      }<br>
+      </code>
+   </pre>
+
+
 
 
 
