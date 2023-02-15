@@ -12,10 +12,10 @@
   <body style="margin:25px;">
     <main>
 
-    <h1 class="center">Project 1: Rasterizer</h1>
-    <p class="center">Abdul Ali Khan, Zachary Zollman</p>
+    <h1>Project 1: Rasterizer</h1>
+    <p>Abdul Ali Khan, Zachary Zollman</p>
     
-    <h2 class="center">Overview</h1>
+    <h2>Overview</h2>
     
     This project gave us the opportunity to gain an understanding of how to implement various computer graphics concepts such as rasterization, supersampling, texture mapping, and level sampling. Through this project, we designed an efficient and robust algorithm to rasterize triangles by using bounding box checks. This involved initially checking the triangle against the bounding box to determine the region of coverage, then checking the individual samples within this bounding box to determine if the samples need to be filled or not. 
     <br></br>
@@ -26,14 +26,14 @@
     Overall, this project was a great learning experience. We were able to gain hands-on experience with computer graphics concepts such as rasterization, transformation, lighting, and texture mapping. We learned various algorithms such as bounding box checks and supersampling for antialiasing and implemented them into our own algorithms. In addition, we delved deeper into pixel sampling as well as level sampling and understood the tradeoffs between the different methods when it
     <br></br>
 
-		<h2 class="center">Task 1: Drawing Single-Color Triangles</h2>
+		<h2>Task 1: Drawing Single-Color Triangles</h2>
 
     To rasterize a triangle, we first find the bounding box of the triangle by calculating the minimum and maximum x and y values of the three vertices. Then we iterate through each pixel in the bounding box and perform a three-line test to check if the pixel is inside the triangle. If the pixel is inside the triangle, we fill the pixel with the specified color.
 
     <br></br>
     The three-line test involves calculating the signed areas of three sub-triangles formed by the pixel and two vertices of the triangle. If the signed areas have the same sign, then the pixel is inside the triangle. We also add a half-pixel offset to the coordinates when filling the pixel to ensure that the pixel is correctly centered within the bounding box. This is the basic approach to triangle rasterization without supersampling.
     <br></br>
-    <img src="three-line-1.jpeg" width="300">
+    <img src="three-line-1.jpeg" width="330">
     <img src="three-line-2.jpeg" width="350">
 
     <pre class="line-numbers">
@@ -75,7 +75,7 @@
     <img src="task1.png" width="700">
 
 
-		<h2 class="center">Task 2: Antialiasing by Supersampling</h2>
+		<h2>Task 2: Antialiasing by Supersampling</h2>
 
     Supersampling involves sampling your model multiple times per pixel, rather than just once per pixel. This is useful because it can reduce undesired behaviors that arise from sampling only once per sample, such as jaggies. By sampling multiple times, we can select a more representative pixel color. In particular, on edges, we can average the triangle color with the background/surrounding color. Thus, there isn’t a triangle present/triangle absent binary, but rather a gradual transition between the triangle’s color and its surroundings.<br>
     <br><br>
@@ -88,12 +88,12 @@
     <img src="task2-sr16.png" width="700">
 
 
-		<h2 class="center">Task 3: Transforms</h2>
+		<h2>Task 3: Transforms</h2>
     In order to rotate and scale the object we use matrix operations to manipulate x and y-offset
     <br><br>
     
-    <img src="linear-transforms.png" width="300">
-    <img src="rotation-transforms.png" width="300">
+    <img src="linear-transforms.png" width="350">
+    <img src="rotation-transforms.png" width="350">
 
     <br><br>
     <pre class="line-numbers">
@@ -132,7 +132,7 @@
     <br><br>
     The cubeman is mid-somersault, trying to get into a handstand to then swing his legs around underneath himself. I have changed the body color by adding blue tiles to give him more motion.
 
-		<h2 class="center">Task 4: Barycentric coordinates</h2>
+		<h2>Task 4: Barycentric coordinates</h2>
     <img src="barycentric-interpolation-triangle.png" width="700">
     
     <br><br>
@@ -144,7 +144,7 @@
     
     <p>Given triangle △ABC, if P=(α,β,γ), where α+β+γ=1, and A, B, C each has an associated value, then P=αA+βB+γC</p>
     <p>We know that the coordinates of point P can be expressed as a linear combination of the coordinates of points A, B, and C. That is,</p>
-    <p class="center">P = αA + βB + γC</p>
+    <p>P = αA + βB + γC</p>
     <p>where α, β, and γ are constants that represent the weights of each point in the linear combination.</p>
     <p>Since α+β+γ=1, we can rewrite the equation as:</p>
     <p lass="center">P = (α/1)A + (β/1)B + (γ/1)C</p>
@@ -172,7 +172,7 @@
 
     <img src="task4.png" width="700">
 
-		<h2 class="center">Task 5: "Pixel sampling" for texture mappings</h2>
+		<h2>Task 5: "Pixel sampling" for texture mappings</h2>
 
     Pixel sampling involves sampling colors on a texture to determine which color gets mapped from the texture onto a shape that actually gets rendered. Our code iterates through locations on a rendered triangle and calculates their barycentric coordinates, and then passes those coordinates to a sampling function in texture.cpp using a struct called <code>SampleParams</code>. There are two different pixel sampling functions: nearest and bilinear. The first finds the nearest location on the texture map and returns its color, while bilinear performs a bilinear interpolation based on the four nearest values of the texture map. We can think of the texture map as a square grid with color values on the vertices; nearest sampling finds the nearest vertex, while bilinear finds the surrounding vertices (upper left, lower left, upper right, and lower right) and averages them based on how close they are to the coordinate we are sampling. Each function accesses colors on the texture map by calling <code>MipLevel::get_texel</code>
     <br><br>
@@ -189,7 +189,7 @@
     Overall, it seems that bilinear sampling leads to smoother transitions between colors within rendered shapes than nearest sampling. Increasing the number of samples per pixel also leads to smoother transitions between colors within rendered shapes, and also between the shapes and the background. The difference between nearest and bilinear sampling is noticeable in the jaggedness or smoothness at boundaries between colors, so it is likely to be most noticeable when there are fine details in the image with high contrast in color. In the images discussed above, the latitude and longitude lines, which were relatively thin, were finer details on the world map. The white lines stood out prominently against the blue waters of the world map. This makes sense because nearest sampling only results in colors that are in the texture map, whereas bilinear sampling can interpolate based on colors that are in the map. On a boundary between multiple colors, nearest sampling will choose the nearest color value on the map, whereas bilinear will interpolate the multiple colors and produce a blend, resulting in smoother transitions.
 
 
-		<h2 class="center">Task 6: "Level sampling" with mipmaps for texture mapping</h2>
+		<h2>Task 6: "Level sampling" with mipmaps for texture mapping</h2>
 
     Level sampling involves pre-computing different levels of resolution of an image and then sampling from appropriate levels, rather than always sampling from the highest-quality image. To implement it, we fill our <code>SampleParams</code> struct with information relevant to sampling, including the level sampling method and the pixel sampling method. We also take the coordinates of the sample point, the point one unit above the sample point, and the point one unit to the right of the sample point, convert them to barycentric coordinates, and store them in the struct. We then pass this struct to our sampling function, <code>Texture::sample</code>. The behavior of this function depends on the level sampling method. For zeroth level sampling, we sample at the zeroth level. For nearest level sampling, we calculate the nearest level to the level that we calculated to be appropriate and sample at that level. For linear level sampling, we sample at the two nearest levels and interpolate between them based on how close they are to the level that we calculated to be appropriate. To calculate which level is appropriate, we use another function called <code>Texture::get_level</code>. In this function, we calculate the difference vectors between the sample’s barycentric coordinate and the sample’s barycentric coordinate with the 1-unit x-offset and y-offset. We then scale the difference in the x-values by the width of the texture and the y-values by the height of the texture. We then select the larger norm of these two vectors, and pass this value into the logarithm function with base 2. If the value is not within the range of possible values for levels, we clamp it to be within this range.
     <br><br>
@@ -202,7 +202,7 @@
     <br><br>
     We can see in these images that the most jagged option of the ones specified is <code>L_ZERO</code> and <code>P_NEAREST</code>, and the smoothest option is <code>L_NEAREST</code> and <code>P_LINEAR</code>. The difference between <code>L_ZERO</code> and <code>L_NEAREST</code> appears to be more dramatic than the difference between <code>P_NEAREST</code> and <code>P_LINEAR</code> for this rendered image.
     <br><br>
-    <h2 class="center">Link</h2>
+    <h2>Link</h2>
     Link to write-up: <a href="https://zacharyzollman.github.io/cs184-proj-webpage/proj1/index.html">https://zacharyzollman.github.io/cs184-proj-webpage/proj1/index.html</a>
     </main>
 	<script src="index.js"></script>
