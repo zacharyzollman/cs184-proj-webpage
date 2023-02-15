@@ -111,9 +111,9 @@
     <img src="rotation-transforms.png" width="350">
     <br><br>
 
-    In the code, the <code>translate</code> function creates a matrix that adds dx and dy, which represent the x and y-offset, to all elements of the matrix. The <code>scale</code> function creates a matrix that multiplies sx and sy, which represent the scale factors in the x and y direction, to all elements of the matrix. Finally, the <code>rotate</code> function creates a matrix that rotates an object by a certain degree using the sine and cosine functions. All of these matrices can then be multiplied together to create a composite transformation matrix which can be used to scale, rotate, and translate an object.
+    In the code, the <code>translate</code> function returns a matrix that adds dx and dy, which represent the x and y-offset, to all elements of the matrix. The <code>scale</code> function returns a matrix that can be used to multiply x-components by sx and y-components by sy, which represent the scale factors in the x and y directions, respectively. Finally, the <code>rotate</code> function returns a matrix that rotates an object by a certain degree using the sine and cosine functions. All of these matrices can then be multiplied together to create a composite transformation matrix which can be used to scale, rotate, and translate an object.
     <br><br>
-    Using the slides from class as a guide, we wrote the logic for the functions below:
+    Using slides from class as a guide, we wrote the logic for the functions below:
     <br><br>
     <pre class="line-numbers">
       <code class="language-clike">
@@ -197,13 +197,13 @@
 
     Pixel sampling involves sampling colors on a texture to determine which color gets mapped from the texture onto a shape that actually gets rendered. Our code iterates through locations on a rendered triangle and calculates their barycentric coordinates, and then passes those coordinates to a sampling function in texture.cpp using a struct called <code>SampleParams</code>. There are two different pixel sampling functions: nearest and bilinear. The first finds the nearest location on the texture map and returns its color, while bilinear performs a bilinear interpolation based on the four nearest values of the texture map. We can think of the texture map as a square grid with color values on the vertices; nearest sampling finds the nearest vertex, while bilinear finds the surrounding vertices (upper left, lower left, upper right, and lower right) and averages them based on how close they are to the coordinate we are sampling. Each function accesses colors on the texture map by calling <code>MipLevel::get_texel</code>
     <br><br>
-    <img src="task5-p_nearest-1.png" width="650">
-    <img src="task5-p_linear-1.png" width="650">
+    <img src="task5-p_nearest-1.png" width="550">
+    <img src="task5-p_linear-1.png" width="550">
     <br><br>
     There is a clear difference between nearest pixel and bilinear sampling with 1 sample per pixel, which is that fine details of the image have more sudden and extreme variation in the nearest pixel version. For example, in the pixel inspector, we can see that the latitude and longitude lines on the globe are more jagged and discontinuous on the nearest pixel version. Looking at the nearest pixel image as a whole, we can see that some of the longitude lines disappear around the equator, and that the lines that are present have a more jagged appearance.
     <br><br>
-    <img src="task5-p_nearest-16.png" width="650">
-    <img src="task5-p_linear-16.png" width="650">
+    <img src="task5-p_nearest-16.png" width="550">
+    <img src="task5-p_linear-16.png" width="550">
     <br><br>
     Both of these 16-sample-per-pixel images are smoother than their 1-sample-per-pixel counterparts. Unlike the smoothing in the bilinear image with 1 sample per pixel, this smoothness includes smoothness of the edges. In other words, for both of these images with more supersampling, the transition between the rendered world map image and the background is more gradual and less jagged. Between the two images, we can see that the nearest pixel sampling has again produced some discontinuities in the latitude and longitude lines, but they are less noticeable at 16 samples per pixel because they are smoothed out. The bilinear sampling does not have that issue to such a great extent. Out of all of the options, bilinear sampling at 16 samples per pixel is the smoothest, and nearest sampling at 1 sample per pixel is the most jagged.
     <br><br>
