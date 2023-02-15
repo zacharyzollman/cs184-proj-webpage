@@ -41,32 +41,30 @@
       // TODO: Task 1: Implement basic triangle rasterization here, no supersampling<br>
       <br>
       
-   // find the bounding box of the triangle<br>
-   int minX = min(x0, min(x1, x2));<br>
-   int maxX = max(x0, max(x1, x2));<br>
-   int minY = min(y0, min(y1, y2));<br>
-   int maxY = max(y0, max(y1, y2));<br>
+      // find the bounding box of the triangle<br>
+      int minX = min(x0, min(x1, x2));<br>
+      int maxX = max(x0, max(x1, x2));<br>
+      int minY = min(y0, min(y1, y2));<br>
+      int maxY = max(y0, max(y1, y2));<br>
 
 
-   // iterate through the bounding box<br>
-   for (int x = minX; x <= maxX; x++)<br>
-   {<br>
-     for (int y = minY; y <= maxY; y++)<br>
-     {<br>
-
-
-       //three line test to see if the point is inside the triangle<br>
-       float d1 = (x - x1) * (y0 - y1) - (x0 - x1) * (y - y1);<br>
-       float d2 = (x - x2) * (y1 - y2) - (x1 - x2) * (y - y2);<br>
-       float d3 = (x - x0) * (y2 - y0) - (x2 - x0) * (y - y0);<br>
+      // iterate through the bounding box<br>
+      for (int x = minX; x <= maxX; x++)<br>
+        {<br>
+          for (int y = minY; y <= maxY; y++)<br>
+          {<br>
+            //three line test to see if the point is inside the triangle<br>
+            float d1 = (x - x1) * (y0 - y1) - (x0 - x1) * (y - y1);<br>
+            float d2 = (x - x2) * (y1 - y2) - (x1 - x2) * (y - y2);<br>
+            float d3 = (x - x0) * (y2 - y0) - (x2 - x0) * (y - y0);<br>
       
-       // if the point is inside the triangle, fill the pixel<br>
-       if ((d1 >= 0 && d2 >= 0 && d3 >= 0) || (d1 <= 0 && d2 <= 0 && d3 <= 0))<br>
-       {<br>
-         fill_pixel(x + 0.5, y + 0.5, color);<br>
+            // if the point is inside the triangle, fill the pixel<br>
+            if ((d1 >= 0 && d2 >= 0 && d3 >= 0) || (d1 <= 0 && d2 <= 0 && d3 <= 0))<br>
+            {<br>
+              fill_pixel(x + 0.5, y + 0.5, color);<br>
+            }<br>
+         }<br>
        }<br>
-     }<br>
-   }<br>
     </code>
 
     The given algorithm uses a bounding box to define the potential area of the triangle and iterates through each pixel within the bounding box to determine whether it is inside or outside of the triangle. As such, it covers every pixel within the bounding box, and therefore, it can't miss any pixels inside the triangle.
@@ -90,8 +88,8 @@
 
 		<h2 class="center">Task 3: Transforms</h2>
     In order to rotate and scale the object we use matrix operations to manipulate x and y-offset
-    <img src="linear-transforms.png" width="700">
-    <img src="rotation-transforms.png" width="700">
+    <img src="linear-transforms.png" width="300">
+    <img src="rotation-transforms.png" width="300">
 
     <br><br>
     Using the slides from class as a guide we created the code below:
@@ -123,7 +121,7 @@
 
   <br><br>
 
-    <code>
+</code>
 
     <img src="task3.png" width="700">
     <br><br>
@@ -150,15 +148,15 @@
 
     <br><br>
     <code>
-      float d1 = (ix - x1) * (y0 - y1) - (x0 - x1) * (jy - y1);<br>
-      float d2 = (ix - x2) * (y1 - y2) - (x1 - x2) * (jy - y2);<br>
-      float d3 = (ix - x0) * (y2 - y0) - (x2 - x0) * (jy - y0);<br>
-      <br><br>
-      if ((d1 >= 0 && d2 >= 0 && d3 >= 0) || (d1 <= 0 && d2 <= 0 && d3 <= 0))<br>
-      {<br>
-        sample_buffer[(j * width + i) * sample_rate + m * ::floor(sqrt(rate)) + n] = color;<br>
-      }<br>
-    <code>
+      float d1 = (ix - x1) * (y0 - y1) - (x0 - x1) * (jy - y1);&lt;br&gt;
+      float d2 = (ix - x2) * (y1 - y2) - (x1 - x2) * (jy - y2);&lt;br&gt;
+      float d3 = (ix - x0) * (y2 - y0) - (x2 - x0) * (jy - y0);&lt;br&gt;
+      &lt;br&gt;&lt;br&gt;
+      if ((d1 &gt;= 0 &amp;&amp; d2 &gt;= 0 &amp;&amp; d3 &gt;= 0) || (d1 &lt;= 0 &amp;&amp; d2 &lt;= 0 &amp;&amp; d3 &lt;= 0))&lt;br&gt;
+      {&lt;br&gt;
+        sample_buffer[(j * width + i) * sample_rate + m * ::floor(sqrt(rate)) + n] = color;&lt;br&gt;
+      }&lt;br&gt;
+    </code>
 
 
     <img src="task4.png" width="700">
