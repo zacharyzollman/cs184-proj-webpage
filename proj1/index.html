@@ -21,20 +21,20 @@
     
     <h2>Overview</h2>
     
-    This project gave us the opportunity to gain an understanding of how to implement various computer graphics concepts such as rasterization, supersampling, texture mapping, and level sampling. Through this project, we implemented powerful algorithms for rasterizing rasterize triangles. To increase efficiency, we used bounding box checks, which involved initially checking the triangle against the bounding box to determine the region of coverage, then checking the individual samples within this bounding box to determine if the samples need to be filled or not. 
+    This project gave us the opportunity to gain an understanding of how to implement various computer graphics concepts such as rasterization, supersampling, texture mapping, and level sampling. Through this project, we implemented powerful algorithms for rasterizing triangles. To increase efficiency, we used bounding box checks, which involved initially checking the triangle against the bounding box to determine the region of coverage, then checking the individual samples within this bounding box to determine if the samples need to be filled or not. 
     <br></br>
     In addition, we implemented supersampling to give our program the power to antialias the scene by utilizing multiple samples per pixel. By doing this, our program was able to produce a smoother image that possessed much less aliasing and jaggies. In order to implement supersampling, we had to modify the rasterization pipeline to take more samples and to combine multiple samples to determine the color for each pixel.
     <br></br>
     We also wrote logic for transforming triangles in space, which involved transformation matrices. We then used barycentric coordinates to implement color interpolation. We were able to assign color values to pixels based on the relative distance from each of the triangle's vertices.
     <br></br>
-    We also implemented texture mapping with pixel sampling and level sampling. Given a texture map, we were able to map color values onto pixels. This involved calculating the barycentric coordinates of a sample point on the rendered triangle, and then finding the corresponding point on the texture map by scaling the x-coordinate by the width of the texture map and the y-coordinate by the height of the texture map. We implemented two different pixel sampling techniques: nearest and bilinear. Nearest will take the closest texel to the sample point and use that as the color, while bilinear will interpolate between four texels to determine the sample's color value. Level sampling was also used so that our program could take advantage of mipmapping, a cost-effective antialiasing technique.
+    We also implemented texture mapping with pixel sampling and level sampling. Given a texture map, we were able to map color values to pixels. This involved calculating the barycentric coordinates of a sample point on the rendered triangle, and then finding the corresponding point on the texture map by scaling the x-coordinate by the width of the texture map and the y-coordinate by the height of the texture map. We implemented two different pixel sampling techniques: nearest and bilinear. Nearest will take the closest texel to the sample point and use that as the color, while bilinear will interpolate between four texels to determine the sample's color value. Level sampling was also used so that our program could take advantage of mipmapping, a cost-effective antialiasing technique.
     <br></br>
     Overall, this project was a great learning experience. It was interesting to see how complex images could be rendered from triangles, lines, and points. We were able to gain hands-on experience with computer graphics concepts such as rasterization, transformation, lighting, bounding box checks, and texture mapping. We got to implement antialiasing techniques (supersampling, pixel sampling, and level sampling), see them in action, and learn about different tradeoffs between them. It was fascinating to observe the differences in practice; supersampling clearly made rendering slower, for example.
     <br></br>
 
 		<h2>Task 1: Drawing Single-Color Triangles</h2>
 
-    To rasterize a triangle, we first find the bounding box of the triangle, which is essentially a rectangle that containes the triangle. To determine the boundaries of the rectangle, we calculate the minimum and maximum x- and y-coordinates of the trianle's vertices. We then test each pixel that is within the ranges of x- and y-values. In other words, we iterate through each pixel in the bounding box. At each pixel, we perform a three-line test to check if the pixel is inside the triangle. If the pixel is inside the triangle, we fill the pixel with the specified color.
+    To rasterize a triangle, we first find the bounding box of the triangle, which is essentially a rectangle that contains the triangle. To determine the boundaries of the rectangle, we calculate the minimum and maximum x- and y-coordinates of the triangle's vertices. We then test each pixel that is within the ranges of x- and y-values. In other words, we iterate through each pixel in the bounding box. At each pixel, we perform a three-line test to check if the pixel is inside the triangle. If the pixel is inside the triangle, we fill the pixel with the specified color.
 
     <br></br>
 
@@ -97,7 +97,7 @@
     <img src="task2-sr16.png" width="550">
 
     <br><br>
-    The abpve images illustrate how increasing the number of samples per pixel can reduce jaggies and result in smoother edges. When we only take 1 sample per pixel, we sometimes end up with odd absences around edges, such as the gaps between red pixels in the above image. When we increase the number of samples, we can better represent the color partially filling the pixel by averaging across multiple samples. When enough samples are taken per pixel, this can eliminate the gaps and smooth the jagged edges.  
+    The above images illustrate how increasing the number of samples per pixel can reduce jaggies and result in smoother edges. When we only take 1 sample per pixel, we sometimes end up with odd absences around edges, such as the gaps between red pixels in the above image. When we increase the number of samples, we can better represent the color partially filling the pixel by averaging across multiple samples. When enough samples are taken per pixel, this can eliminate the gaps and smooth the jagged edges.  
 
 
 		<h2>Task 3: Transforms</h2>
