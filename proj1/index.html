@@ -37,13 +37,11 @@
     To rasterize a triangle, we first find the bounding box of the triangle, which is essentially a rectangle that containes the triangle. To determine the boundaries of the rectangle, we calculate the minimum and maximum x- and y-coordinates of the trianle's vertices. We then test each pixel that is within the ranges of x- and y-values. In other words, we iterate through each pixel in the bounding box. At each pixel, we perform a three-line test to check if the pixel is inside the triangle. If the pixel is inside the triangle, we fill the pixel with the specified color.
 
     <br></br>
-    The three-line test involves calculating the signed areas of three sub-triangles formed by the pixel and two vertices of the triangle. If the signed areas have the same sign, then the pixel is inside the triangle. We also add a half-pixel offset to the coordinates when filling the pixel to ensure that the pixel is correctly centered within the bounding box. This is the basic approach to triangle rasterization without supersampling.
-    <br></br>
     <img src="three-line-1.jpeg" width="330">
     <img src="three-line-2.jpeg" width="350">
     <br></br>
 
-    The Point-in-Triangle test is a simple method in computer graphics that is used to determine whether a given point lies within a given triangle. This test works by considering each line of the triangle and determining whether the point is above or below that line. If the point is above or on all three lines, then it is inside the triangle; if it is below any of the lines, then it is outside the triangle. 
+    The Point-in-Triangle test is a simple method in computer graphics that is used to determine whether a given point lies within a given triangle. This test works by considering each line of the triangle and determining whether the point is above or below that line. If the point is above or on all three lines, then it is inside the triangle; if it is below any of the lines, then it is outside the triangle.  The test  calculates the signed areas of three sub-triangles formed by the pixel and two vertices of the triangle. If the signed areas have the same sign, then the pixel is inside the triangle. We also add a half-pixel offset to the coordinates when filling the pixel to ensure that the pixel is correctly centered within the bounding box. This is the basic approach to triangle rasterization without supersampling.
 
     <pre class="line-numbers">
       <code class="language-clike">      
