@@ -76,7 +76,7 @@
     The given algorithm uses a bounding box to define the potential area of the triangle and iterates through each pixel within the bounding box to determine whether it is inside or outside of the triangle. As such, it covers every pixel within the bounding box, and therefore, it can't miss any pixels inside the triangle.
     Therefore, the given algorithm is no worse than one that checks each sample within the bounding box of the triangle, and it provides a reasonable trade-off between computational efficiency and accuracy.
 <br><br>
-    <img src="task1.png" width="700">
+    <img src="task1.png" width="650">
 
 
 		<h2>Task 2: Antialiasing by Supersampling</h2>
@@ -86,10 +86,10 @@
     In order to antialias our triangles, we increased the size of our sample buffer so that we could store one color per sample. In order to achieve this, we modified the <code>sample_buffer.resize()</code> calls in <code>set_sample_rate</code> and <code>set_framebuffer_target</code> to set the size to <code>width * height * sample_rate</code>. We also modified the <code>rasterize_triangle</code> function to be able to sample multiple points within the given pixel. The samples are evenly spaced in a sort of mini-grid within the grid of pixels. As we move through the grids using for loops, we set the color in the sample buffer to be the triangle color if it is within the triangle. We modified <code>resolve_to_framebuffer</code> so that it could take in multiple sample colors from the sample buffer to determine a single pixel color. Specifically, we averaged the color values. This involved summing the RGB values for each color and dividing by the number of colors. We implemented supersampling for triangles, but we still wanted lines and points to render appropriately, so we modified <code>fill_pixel</code> to fill all corresponding samples in the sample buffer with the desired color. That way, when the corresponding samples were averaged to determine the color for the pixel, they averaged to the desired color.
 
     <br><br>
-    <img src="task1.png" width="700">
-    <img src="task2-sr4.png" width="700">
-    <img src="task2-sr9.png" width="700">
-    <img src="task2-sr16.png" width="700">
+    <img src="task1.png" width="650">
+    <img src="task2-sr4.png" width="650">
+    <img src="task2-sr9.png" width="650">
+    <img src="task2-sr16.png" width="650">
 
 
 		<h2>Task 3: Transforms</h2>
@@ -98,7 +98,9 @@
     
     <img src="linear-transforms.png" width="350">
     <img src="rotation-transforms.png" width="350">
+    <br><br>
 
+    Linear transformations are performed using matrices, and matrix rotation is performed using the sin and cos functions. In the code, the translate function creates a matrix that adds dx and dy, which represent the x and y-offset, to all elements of the matrix. The scale function creates a matrix that multiplies sx and sy, which represent the scale factors in the x and y direction, to all elements of the matrix. Finally, the rotate function creates a matrix that rotates an object by a certain degree using the sin and cos functions. All of these matrices can then be multiplied together to create a composite transformation matrix which can be used to scale, rotate, and translate an object.
     <br><br>
     <pre class="line-numbers">
       <code class="language-clike">    
@@ -132,12 +134,12 @@
     </pre>
 
 
-    <img src="task3.png" width="700">
+    <img src="task3.png" width="650">
     <br><br>
     The cubeman is mid-somersault, trying to get into a handstand to then swing his legs around underneath himself. I have changed the body color by adding blue tiles to give him more motion.
 
 		<h2>Task 4: Barycentric coordinates</h2>
-    <img src="barycentric-interpolation-triangle.png" width="700">
+    <img src="barycentric-interpolation-triangle.png" width="650">
     
     <br><br>
     Barycentric coordinates are a way to represent a point inside a triangle as a linear combination of the triangle's vertices. The coordinates are determined by computing the ratios of the areas of three smaller triangles formed by the point and each of the triangle's edges, to the area of the entire triangle. These ratios represent the weights assigned to each vertex to calculate the position of the point. 
@@ -174,19 +176,19 @@
 
 
 
-    <img src="task4.png" width="700">
+    <img src="task4.png" width="650">
 
 		<h2>Task 5: "Pixel sampling" for texture mappings</h2>
 
     Pixel sampling involves sampling colors on a texture to determine which color gets mapped from the texture onto a shape that actually gets rendered. Our code iterates through locations on a rendered triangle and calculates their barycentric coordinates, and then passes those coordinates to a sampling function in texture.cpp using a struct called <code>SampleParams</code>. There are two different pixel sampling functions: nearest and bilinear. The first finds the nearest location on the texture map and returns its color, while bilinear performs a bilinear interpolation based on the four nearest values of the texture map. We can think of the texture map as a square grid with color values on the vertices; nearest sampling finds the nearest vertex, while bilinear finds the surrounding vertices (upper left, lower left, upper right, and lower right) and averages them based on how close they are to the coordinate we are sampling. Each function accesses colors on the texture map by calling <code>MipLevel::get_texel</code>
     <br><br>
-    <img src="task5-p_nearest-1.png" width="700">
-    <img src="task5-p_linear-1.png" width="700">
+    <img src="task5-p_nearest-1.png" width="650">
+    <img src="task5-p_linear-1.png" width="650">
     <br><br>
     There is a clear difference between nearest pixel and bilinear sampling with 1 sample per pixel, which is that fine details of the image have more sudden and extreme variation in the nearest pixel version. For example, in the pixel inspector, we can see that the latitude and longitude lines on the globe are more jagged and discontinuous on the nearest pixel version. Looking at the nearest pixel image as a whole, we can see that some of the longitude lines disappear around the equator, and that the lines that are present have a more jagged appearance.
     <br><br>
-    <img src="task5-p_nearest-16.png" width="700">
-    <img src="task5-p_linear-16.png" width="700">
+    <img src="task5-p_nearest-16.png" width="650">
+    <img src="task5-p_linear-16.png" width="650">
     <br><br>
     Both of these 16-sample-per-pixel images are smoother than their 1-sample-per-pixel counterparts. Unlike the smoothing in the bilinear image with 1 sample per pixel, this smoothness includes smoothness of the edges. In other words, for both of these images with more supersampling, the transition between the rendered world map image and the background is more gradual and less jagged. Between the two images, we can see that the nearest pixel sampling has again produced some discontinuities in the latitude and longitude lines, but they are less noticeable at 16 samples per pixel because they are smoothed out. The bilinear sampling does not have that issue to such a great extent. Out of all of the options, bilinear sampling at 16 samples per pixel is the smoothest, and nearest sampling at 1 sample per pixel is the most jagged.
     <br><br>
@@ -199,10 +201,10 @@
     <br><br>
     Switching from nearest pixel sampling to linear pixel sampling decreases speed and increases antialiasing power. Storing pre-computed lower-resolution levels in a mipmap increases memory usage, but using them can increase antialiasing power and they can be faster than supersampling. Relative to nearest level sampling, bilinear sampling is slower but increases antialiasing power. Supersampling increases antialiasing power substantially, but decreases speed and generally increases memory usage since more values are stored per rendered pixel.
     <br><br>
-    <img src="task6-l_zero-p_nearest.png" width="700">
-    <img src="task6-l_zero-p_linear.png" width="700">
-    <img src="task6-l_nearest-p_nearest.png" width="700">
-    <img src="task6-l_nearest-p_linear.png" width="700">
+    <img src="task6-l_zero-p_nearest.png" width="650">
+    <img src="task6-l_zero-p_linear.png" width="650">
+    <img src="task6-l_nearest-p_nearest.png" width="650">
+    <img src="task6-l_nearest-p_linear.png" width="650">
     <br><br>
     We can see in these images that the most jagged option of the ones specified is <code>L_ZERO</code> and <code>P_NEAREST</code>, and the smoothest option is <code>L_NEAREST</code> and <code>P_LINEAR</code>. The difference between <code>L_ZERO</code> and <code>L_NEAREST</code> appears to be more dramatic than the difference between <code>P_NEAREST</code> and <code>P_LINEAR</code> for this rendered image.
     <br><br>
