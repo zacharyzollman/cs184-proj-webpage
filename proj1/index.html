@@ -32,8 +32,8 @@
     <br></br>
     The three-line test involves calculating the signed areas of three sub-triangles formed by the pixel and two vertices of the triangle. If the signed areas have the same sign, then the pixel is inside the triangle. We also add a half-pixel offset to the coordinates when filling the pixel to ensure that the pixel is correctly centered within the bounding box. This is the basic approach to triangle rasterization without supersampling.
     <br></br>
-    <img src="three-line-1.png" width="300">
-    <img src="three-line-2.png" width="350">
+    <img src="three-line-1.jpeg" width="300">
+    <img src="three-line-2.jpeg" width="350">
 
 
     <code>
@@ -147,20 +147,18 @@
     <p>Therefore, we have proved that if P=(α,β,γ), where α+β+γ=1, and A, B, C each has an associated value, then P=αA+βB+γC.</p>
 
     <br><br>
+<!-- use pre and code -->
+<pre><code>
+  float d1 = (ix - x1) * (y0 - y1) - (x0 - x1) * (jy - y1);&lt;br&gt;
+  float d2 = (ix - x2) * (y1 - y2) - (x1 - x2) * (jy - y2);&lt;br&gt;
+  float d3 = (ix - x0) * (y2 - y0) - (x2 - x0) * (jy - y0);&lt;br&gt;
+  &lt;br&gt;&lt;br&gt;
+  if ((d1 &gt;= 0 &amp;&amp; d2 &gt;= 0 &amp;&amp; d3 &gt;= 0) || (d1 &lt;= 0 &amp;&amp; d2 &lt;= 0 &amp;&amp; d3 &lt;= 0))&lt;br&gt;
+  {&lt;br&gt;
+    sample_buffer[(j * width + i) * sample_rate + m * ::floor(sqrt(rate)) + n] = color;&lt;br&gt;
+  }&lt;br&gt;
+</code></pre>
 
-
-
-
-    <code>
-      float d1 = (ix - x1) * (y0 - y1) - (x0 - x1) * (jy - y1);&lt;br&gt;
-      float d2 = (ix - x2) * (y1 - y2) - (x1 - x2) * (jy - y2);&lt;br&gt;
-      float d3 = (ix - x0) * (y2 - y0) - (x2 - x0) * (jy - y0);&lt;br&gt;
-      &lt;br&gt;&lt;br&gt;
-      if ((d1 &gt;= 0 &amp;&amp; d2 &gt;= 0 &amp;&amp; d3 &gt;= 0) || (d1 &lt;= 0 &amp;&amp; d2 &lt;= 0 &amp;&amp; d3 &lt;= 0))&lt;br&gt;
-      {&lt;br&gt;
-        sample_buffer[(j * width + i) * sample_rate + m * ::floor(sqrt(rate)) + n] = color;&lt;br&gt;
-      }&lt;br&gt;
-    </code>
 
 
     <img src="task4.png" width="700">
