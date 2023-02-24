@@ -25,10 +25,8 @@
     <br></br>
 
 		<h2>Section I: Bezier Curves and Surfaces</h2>
-		<br><br>
 			<h3>Part 1: Bezier Curves with 1D de Casteljau Subdivision</h3>
 
-				<br></br>
 				De Casteljau's algorithm is a recursive method to evaluate a Bezier curve. It works by dividing the control points into two subsets and calculating intermediate control points along the curve until a final point is reached.
 				<br></br>
 				The evaluateStep function uses a simplified version of de Casteljau's algorithm to evaluate a Bezier curve. It takes an input vector of control points and calculates the intermediate points along the curve using the current value of t. The function iterates over each pair of adjacent control points and calculates a new point on the curve using the current value of t. This new point is then added to a vector of intermediate points. The function returns this vector of intermediate points, which can be used to draw the Bezier curve.
@@ -72,7 +70,6 @@
 
 			<h3>Part 2: Bezier Surfaces with Separable 1D de Casteljau</h3>
 
-				<br><br>
 				The de Casteljau algorithm can be extended to evaluate Bezier surfaces by first evaluating a set of Bezier curves along one axis (e.g. u-axis) using the algorithm for 1D Bezier curves. The resulting set of points are then used as control points for another set of Bezier curves along the other axis (e.g. v-axis). The final point on the surface is then obtained by evaluating the resulting curve at a specific value of v.
 				<br><br>
 				The evaluateStep function is the same as in the 1D Bezier curve case, but is called with a vector of control points for one of the axes of the surface. The evaluate1D function uses a while loop to repeatedly call evaluateStep until only one point remains. This final point represents the evaluation of the Bezier curve along one of the axes.
@@ -123,9 +120,7 @@
 				<br><br>
 
 	<h2>Section II: Triangle Meshes and Half-Edge Data Structure</h2>
-	<br><br>
 		<h3>Part 3: Area-Weighted Vertex Normals</h3>
-			<br><br>
 			The area-weighted vertex normal at a given vertex is a vector that is the weighted average of the normals of the adjacent faces, where each weight is proportional to the area of the corresponding face that shares the vertex.
 			<br><br>
 			The normal() function calculates the area-weighted vertex normal for a given vertex. We first initialize the result vector and the total area to zero. We then iterate over the half-edges that are adjacent to the vertex.
@@ -161,7 +156,6 @@
 			<br><br>
 
 		<h3>Part 4: Edge Flip</h3>
-			<br><br>
 
 
 
