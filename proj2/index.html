@@ -25,178 +25,161 @@
     <br></br>
 
 		<h2>Section I: Bezier Curves and Surfaces</h2>
-		<h3>Part 1: Bezier Curves with 1D de Casteljau Subdivision
-		</h3>
+		<br><br>
+			<h3>Part 1: Bezier Curves with 1D de Casteljau Subdivision</h3>
+
+				<br></br>
+				De Casteljau's algorithm is a recursive method to evaluate a Bezier curve. It works by dividing the control points into two subsets and calculating intermediate control points along the curve until a final point is reached.
+				<br></br>
+				The evaluateStep function uses a simplified version of de Casteljau's algorithm to evaluate a Bezier curve. It takes an input vector of control points and calculates the intermediate points along the curve using the current value of t. The function iterates over each pair of adjacent control points and calculates a new point on the curve using the current value of t. This new point is then added to a vector of intermediate points. The function returns this vector of intermediate points, which can be used to draw the Bezier curve.
+				<br></br>
+				Note that this function only calculates a single step of the de Casteljau algorithm, so it needs to be called multiple times with different values of t in order to fully evaluate the curve.
+				<br></br>
 
 
-    <br></br>
+				<pre class="line-numbers">
+					<code class="language-clike">      
+					std::vector<Vector2D> BezierCurve::evaluateStep(std::vector<Vector2D> const &points)
+						{
+						std::vector<Vector2D> result;
+						int result_size = points.size() - 1;
+						for (int i= 0; i < result_size; i++)
+						{
+							Vector2D new_point = (1 - t) * points[i] + t * points[i + 1];
+							result.push_back(new_point);
+						}
+						return result;
+						}					
+					</code>
+				</pre>    
+
+				<br><br>
+				<img src="task1.png" width="300">
+				<br><br>
+				<img src="task1-6-1.png" width="300">
+				<img src="task1-6-2.png" width="300">
+				<img src="task1-6-3.png" width="300">
+				<img src="task1-6-4.png" width="300">
+				<img src="task1-6-5.png" width="300">
+				<img src="task1-6-6.png" width="300">
+				<img src="task1-6-7.png" width="300">
+				<img src="task1-6-8.png" width="300">
+				<br><br>
+				<img src="task1-6-9.png" width="300">
+				<img src="task1-6-10.png" width="300">
+				<img src="task1-6-11.png" width="300">
+				<br><br>
+
+			<h3>Part 2: Bezier Surfaces with Separable 1D de Casteljau</h3>
+
+				<br><br>
+				The de Casteljau algorithm can be extended to evaluate Bezier surfaces by first evaluating a set of Bezier curves along one axis (e.g. u-axis) using the algorithm for 1D Bezier curves. The resulting set of points are then used as control points for another set of Bezier curves along the other axis (e.g. v-axis). The final point on the surface is then obtained by evaluating the resulting curve at a specific value of v.
+				<br><br>
+				The evaluateStep function is the same as in the 1D Bezier curve case, but is called with a vector of control points for one of the axes of the surface. The evaluate1D function uses a while loop to repeatedly call evaluateStep until only one point remains. This final point represents the evaluation of the Bezier curve along one of the axes.
+				<br><br>
+				The evaluate function first evaluates the set of Bezier curves along one axis (using evaluate1D) to obtain a set of control points for the other axis. It then evaluates another set of Bezier curves along the other axis (again using evaluate1D) to obtain the final point on the surface.
+				<br><br>
+				The algorithm is used to recursively subdivide the control points of a Bezier surface into smaller sets until a final point is reached, allowing for the evaluation of the surface at any given u,v position.
+				<br><br>
+
+				<pre class="line-numbers">
+					<code class="language-clike">      
+						std::vector<Vector3D> BezierPatch::evaluateStep(std::vector<Vector3D> const &points, double t) const
+							{
+							  std::vector<Vector3D> result;
+							  int result_size = points.size() - 1;
+							  for (int i = 0; i < result_size; i++)
+							  {
+								Vector3D new_point = (1 - t) * points[i] + t * points[i + 1];
+								result.push_back(new_point);
+							  }
+							  return result;
+							}
+						  
+						Vector3D BezierPatch::evaluate1D(std::vector<Vector3D> const &points, double t) const
+							{
+							  std::vector<Vector3D> new_points = points;
+							  while (new_points.size() > 1)
+							  {
+								new_points = evaluateStep(new_points, t);
+							  }
+							  return new_points[0];
+							}
+						  
+						Vector3D BezierPatch::evaluate(double u, double v) const
+							{
+							  std::vector<Vector3D> other_axis;
+							  other_axis.reserve(controlPoints.size());
+							  for (const auto &controlPoint : controlPoints)
+							  {
+								other_axis.push_back(evaluate1D(controlPoint, u));
+							  }
+							  return evaluate1D(other_axis, v);
+							}	  
+					</code>
+				</pre> 
+				<br><br>
+				<img src="task2.png" width="300">
+				<br><br>
+
+	<h2>Section II: Triangle Meshes and Half-Edge Data Structure</h2>
+	<br><br>
+		<h3>Part 3: Area-Weighted Vertex Normals</h3>
+			<br><br>
+			The area-weighted vertex normal at a given vertex is a vector that is the weighted average of the normals of the adjacent faces, where each weight is proportional to the area of the corresponding face that shares the vertex.
+			<br><br>
+			The normal() function calculates the area-weighted vertex normal for a given vertex. We first initialize the result vector and the total area to zero. We then iterate over the half-edges that are adjacent to the vertex.
+			<br><br>
+			For each half-edge, we calculate the cross product of the vectors formed by the positions of the adjacent vertices of the current half-edge and the next two half-edges, which gives the normal of the corresponding triangle. We add this normal to the result vector and increments the total area by half of the norm of the cross product. This is because the area of a triangle is proportional to the norm of its cross product. Finally, the function returns the normalized result vector divided by the total area, which gives the area-weighted vertex normal.
+			<br><br>
+
+			<pre class="line-numbers">
+				<code class="language-clike">      
+				Vector3D Vertex::normal(void) const
+					{
+						HalfedgeCIter edge = halfedge();
+						Vector3D result = Vector3D();
+						double area = 0;
+						do
+						{
+						Vector3D p1 = edge->vertex()->position;
+						Vector3D p2 = edge->next()->vertex()->position;
+						Vector3D p3 = edge->next()->next()->vertex()->position;
+						Vector3D n1 = cross(p2 - p1, p3 - p1);
+						result += n1;
+						area += n1.norm() / 2;
+						edge = edge->twin()->next();
+						} while (edge != halfedge());
+						return result / area;
+					}
+				</code>
+			</pre> 
+
+			<br><br>
+			<img src="task3-1.png" width="300">
+			<img src="task3-2.png" width="300">
+			<br><br>
+
+		<h3>Part 4: Edge Flip</h3>
+			<br><br>
 
 
-    <pre class="line-numbers">
-      <code class="language-clike">      
-        std::vector<Vector2D> BezierCurve::evaluateStep(std::vector<Vector2D> const &points)
-			{
-			  std::vector<Vector2D> result;
-			  int result_size = points.size() - 1;
-			  for (int i= 0; i < result_size; i++)
-			  {
-				Vector2D new_point = (1 - t) * points[i] + t * points[i + 1];
-				result.push_back(new_point);
-			  }
-			  return result;
-			}		  
-      </code>
-   </pre>
-
-    
-
-    The given algorithm uses a bounding box to define the potential area of the triangle and iterates through each pixel within the bounding box to determine whether it is inside or outside of the triangle. As such, it covers every pixel within the bounding box, and therefore, it can't miss any pixels inside the triangle.
-    Therefore, the given algorithm is no worse than one that checks each sample within the bounding box of the triangle, and it provides a reasonable trade-off between computational efficiency and accuracy.
-<br><br>
-    <img src="task1.png" width="650">
-
-
-		<h2>Task 2: Antialiasing by Supersampling</h2>
-
-    Supersampling involves sampling a model multiple times per pixel, rather than just once per pixel. This is useful because it can reduce undesired behaviors that arise from sampling only once per sample, such as jaggies. By sampling multiple times, we can select a more representative pixel color. In particular, on edges, we can average the triangle color with the background/surrounding color. Thus, there isn’t as much of a sudden cutoff, but rather a gradual transition between the triangle’s color and its surroundings.<br>
-    <br><br>
-    In order to antialias our triangles, we increased the size of our sample buffer so that we could store the desired number of colors per pixel. In order to achieve this, we modified the <code>sample_buffer.resize()</code> calls in <code>set_sample_rate</code> and <code>set_framebuffer_target</code> to set the size to <code>width * height * sample_rate</code>. We also modified the <code>rasterize_triangle</code> function to be able to sample multiple points within the given pixel. The samples are evenly spaced in a sort of mini-grid within the grid of pixels. As we move through the grids using <code>for</code> loops, we set the color in the sample buffer to be the triangle color if it is within the triangle. We modified <code>resolve_to_framebuffer</code> so that it could take in multiple sample colors from the sample buffer to determine a single pixel color. Specifically, we averaged the color values. This involved summing the RGB values for each color and dividing by the number of colors. We implemented supersampling for triangles, but we still wanted lines and points to render appropriately, so we modified <code>fill_pixel</code> to fill all corresponding samples in the sample buffer with the desired color. That way, when the corresponding samples were averaged to determine the color for the pixel, they averaged to the desired color.
-
-    <br><br>
-    <img src="task1.png" width="550">
-    <img src="task2-sr4.png" width="550">
-    <img src="task2-sr9.png" width="550">
-    <img src="task2-sr16.png" width="550">
-
-    <br><br>
-    The above images illustrate how increasing the number of samples per pixel can reduce jaggies and result in smoother edges. When we only take 1 sample per pixel, we sometimes end up with odd absences around edges, such as the gaps between red pixels in the above image. When we increase the number of samples, we can better represent the color partially filling the pixel by averaging across multiple samples. When enough samples are taken per pixel, this can eliminate the gaps and smooth the jagged edges.  
-
-
-		<h2>Task 3: Transforms</h2>
-    <br><br>
-    Linear transformations in computer graphics are changes made to an image or object in order to modify its size or position. These transformations can be mathematically represented by matrices; for example, a scaling transformation can be represented by a matrix that multiplies the coordinates of each point on the object by a certain factor, and a translation transformation can be represented by a matrix that adds a certain value to the coordinates of each point. The advantage of using matrices to represent linear transformations is that they can be combined and applied to an object in a single operation, allowing complex transformations to be performed quickly and efficiently.
-    <br><br>
-
-    Rotation matrices use sine and cosine functions to rotate an object around a certain axis. A rotation matrix is defined as R = [[cos(θ), -sin(θ)], [sin(θ), cos(θ)]]. When multiplied by the coordinates of a point of an object, this matrix rotates the point by an angle θ around the origin. The sine and cosine of the angle θ are used to calculate the coefficients of the matrix, while the elements of the matrix indicate how the coordinates of the point should be scaled and offset in order to rotate the point by the desired angle.
-    <br><br>
 
 
 
-    In the code, the <code>translate</code> function returns a matrix that adds dx and dy, which represent the x and y-offset, to all elements of the matrix. The <code>scale</code> function returns a matrix that can be used to multiply x-components by sx and y-components by sy, which represent the scale factors in the x and y directions, respectively. Finally, the <code>rotate</code> function returns a matrix that rotates an object by a certain degree using the sine and cosine functions. All of these matrices can then be multiplied together to create a composite transformation matrix which can be used to scale, rotate, and translate an object.
-    <br><br>
-    Using slides from class as a guide, we wrote the logic for the functions below:
-    <br><br>
-    <pre class="line-numbers">
-      <code class="language-clike">
-      Matrix3x3 translate(float dx, float dy)
-      {
-        // Part 3: Fill this in.
-        return Matrix3x3(1, 0, dx,
-                0, 1, dy,
-                0, 0, 1);
-      }
-    
-      Matrix3x3 scale(float sx, float sy)
-      {
-        // Part 3: Fill this in.
-        return Matrix3x3(sx, 0, 0,
-                0, sy, 0,
-                0, 0, 1);
-      }
-    
-      // The input argument is in degrees counterclockwise
-      Matrix3x3 rotate(float deg)
-      {
-        // Part 3: Fill this in.
-        float rad = deg * PI / 180;
-        return Matrix3x3(cos(rad), -sin(rad), 0,
-                sin(rad), cos(rad), 0,
-                0, 0, 1);
-      } 
-      </code>
-    </pre>
-
-
-    <img src="task3.png" width="650">
-    <br><br>
-    The cubeman is mid-somersault, trying to get into a handstand to then swing his legs around underneath himself. I have changed the body color by adding blue tiles to give him more motion.
-
-		<h2>Task 4: Barycentric coordinates</h2>
-    <img src="barycentric-interpolation-triangle.png" width="650">
-    
-    <br><br>
-    Barycentric coordinates are a way to represent a point inside a triangle as a linear combination of the triangle's vertices. To understand how we compute these coordinates, you can imagine that we create lines between the point inside the triangle and the triangle's three vertices. This creates three smaller triangles within the triangle. Each vertex is associated with the smaller triangle that is across from it in the bigger triangle. Thus, the closer a vertex is to a point, the larger its corresponding triangle will be. We then compute the ratio of the area of each smaller triangle to the area of the entire triangle. In this system, a vertex that is closer to the point inside the triangle will get a larger ratio. These values represent the weights assigned to each vertex. If we do a weighted sum of the vertices (using these weights that we calculated), we will get the position of the point. This can be useful for color interpolation, because if we assign a color to each vertex, we can use barycentric coordinates to calculate a weighted sum of each color for each pixel inside the triangle. Thus, points closer to a vertex will have a color closer to the color associated with the vertex. This phenomenon is visible in the above image.
-    <br><br>
-    Since barycentric coordinates are simply a set of numbers that describe a linear combination of vertices of a given triangle, we can also describe them symbolically.
-    <br><br>
-
-    
-    <p>Given triangle △ABC, if P=(α,β,γ), where α+β+γ=1, and A, B, C each has an associated value, then P=αA+βB+γC</p>
-    <p>We know that the coordinates of point P can be expressed as a linear combination of the coordinates of points A, B, and C. That is,</p>
-    <p>P = αA + βB + γC</p>
-    <p>where α, β, and γ are constants that represent the weights of each point in the linear combination.</p>
-    <p>Since α+β+γ=1, we can rewrite the equation as:</p>
-    <p lass="center">P = (α/1)A + (β/1)B + (γ/1)C</p>
-    <p>This can be interpreted as a weighted average of the values of A, B, and C, where the weights are α, β, and γ respectively. Thus, P is the center of gravity of the triangle.</p>
-    <p>Therefore, we have proved that if P=(α,β,γ), where α+β+γ=1, and A, B, C each has an associated value, then P=αA+βB+γC.</p>
-
-    <br><br>
-
-    <pre class="line-numbers">
-      <code class="language-clike">
-      float d1 = (ix - x1) * (y0 - y1) - (x0 - x1) * (jy - y1);
-      float d2 = (ix - x2) * (y1 - y2) - (x1 - x2) * (jy - y2);
-      float d3 = (ix - x0) * (y2 - y0) - (x2 - x0) * (jy - y0);
-
-      if ((d1 &gt;= 0 &amp;&amp; d2 &gt;= 0 &amp;&amp; d3 &gt;= 0) || (d1 &lt;= 0 &amp;&amp; d2 &lt;= 0 &amp;&amp; d3 &lt;= 0))
-      {
-        sample_buffer[(j * width + i) * sample_rate + m * ::floor(sqrt(rate)) + n] = color;
-      }
-      </code>
-   </pre>
+				
 
 
 
 
 
-    <img src="task4.png" width="650">
-    <br><br>
-    We encountered an issue where there was a white pixel at the center of the color wheel but it was resolved by adjusting the allowable gamma value to fill any carry over caused by floating point errors. This adjustment improved the accuracy of the color wheel and ensured the colors were displayed correctly. 
-    <br><br>
 
-		<h2>Task 5: "Pixel sampling" for texture mappings</h2>
 
-    Pixel sampling involves sampling colors on a texture to determine which color gets mapped from the texture onto a shape that actually gets rendered. Our code iterates through locations on a rendered triangle and calculates their barycentric coordinates, and then passes those coordinates to a sampling function in texture.cpp using a struct called <code>SampleParams</code>. There are two different pixel sampling functions: nearest and bilinear. The first finds the nearest location on the texture map and returns its color, while bilinear performs a bilinear interpolation based on the four nearest values of the texture map. We can think of the texture map as a square grid with color values on the vertices; nearest sampling finds the nearest vertex, while bilinear finds the surrounding vertices (upper left, lower left, upper right, and lower right) and averages them based on how close they are to the coordinate we are sampling. Each function accesses colors on the texture map by calling <code>MipLevel::get_texel</code>
-    <br><br>
-    <img src="task5-p_nearest-1.png" width="550">
-    <img src="task5-p_linear-1.png" width="550">
-    <br><br>
-    There is a clear difference between nearest pixel and bilinear sampling with 1 sample per pixel, which is that fine details of the image have more sudden and extreme variation in the nearest pixel version. For example, in the pixel inspector, we can see that the latitude and longitude lines on the globe are more jagged and discontinuous on the nearest pixel version. Looking at the nearest pixel image as a whole, we can see that some of the longitude lines disappear around the equator, and that the lines that are present have a more jagged appearance.
-    <br><br>
-    <img src="task5-p_nearest-16.png" width="550">
-    <img src="task5-p_linear-16.png" width="550">
-    <br><br>
-    Both of these 16-sample-per-pixel images are smoother than their 1-sample-per-pixel counterparts. Unlike the smoothing in the bilinear image with 1 sample per pixel, this smoothness includes smoothness of the edges. In other words, for both of these images with more supersampling, the transition between the rendered world map image and the background is more gradual and less jagged. Between the two images, we can see that the nearest pixel sampling has again produced some discontinuities in the latitude and longitude lines, but they are less noticeable at 16 samples per pixel because they are smoothed out. The bilinear sampling does not have that issue to such a great extent. Out of all of the options, bilinear sampling at 16 samples per pixel is the smoothest, and nearest sampling at 1 sample per pixel is the most jagged.
-    <br><br>
-    Overall, it seems that bilinear sampling leads to smoother transitions between colors within rendered shapes than nearest sampling. Increasing the number of samples per pixel also leads to smoother transitions between colors within rendered shapes, and also between the shapes and the background. The difference between nearest and bilinear sampling is noticeable in the jaggedness or smoothness at boundaries between colors, so it is likely to be most noticeable when there are fine details in the image with high contrast in color. In the images discussed above, the latitude and longitude lines, which were relatively thin, were finer details on the world map. The white lines stood out prominently against the blue waters of the world map. This makes sense because nearest sampling only results in colors that are in the texture map, whereas bilinear sampling can interpolate based on colors that are in the map. On a boundary between multiple colors, nearest sampling will choose the nearest color value on the map, whereas bilinear will interpolate the multiple colors and produce a blend, resulting in smoother transitions.
-    <br><br>
-    One aspect of this task that was challenging was dealing with edge conditions. The texel coordinates, I realized, had to be less than the dimensions of the mip (ie, the x-coordinates had to be less than the width of the mip and the y-coordinates had to be less than the height of the mip). On edges of the mip, bilinear sampling might only interpolate between two distinct texels, or it could end up with only one.
 
-		<h2>Task 6: "Level sampling" with mipmaps for texture mapping</h2>
 
-    Level sampling involves pre-computing different levels of resolution of an image and then sampling from appropriate levels, rather than always sampling from the highest-quality image. To implement it, we fill our <code>SampleParams</code> struct with information relevant to sampling, including the level sampling method and the pixel sampling method. We also take the coordinates of the sample point, the point one unit above the sample point, and the point one unit to the right of the sample point, convert them to barycentric coordinates, and store them in the struct. We then pass this struct to our sampling function, <code>Texture::sample</code>. The behavior of this function depends on the level sampling method. For zeroth level sampling, we sample at the zeroth level. For nearest level sampling, we calculate the nearest level to the level that we calculated to be appropriate and sample at that level. For linear level sampling, we sample at the two nearest levels and interpolate between them based on how close they are to the level that we calculated to be appropriate. To calculate which level is appropriate, we use another function called <code>Texture::get_level</code>. In this function, we calculate the difference vectors between the sample’s barycentric coordinate and the sample’s barycentric coordinate with the 1-unit x-offset and y-offset. We then scale the difference in the x-values by the width of the texture and the y-values by the height of the texture. We then select the larger norm of these two vectors, and pass this value into the logarithm function with base 2. If the value is not within the range of possible values for levels, we clamp it to be within this range.
-    <br><br>
-    Switching from nearest pixel sampling to linear pixel sampling decreases speed and increases antialiasing power. Storing pre-computed lower-resolution levels in a mipmap increases memory usage, but using them can increase antialiasing power and they can be faster than supersampling. Relative to nearest level sampling, bilinear sampling is slower but increases antialiasing power. Supersampling increases antialiasing power substantially, but decreases speed and generally increases memory usage since more values are stored per rendered pixel.
-    <br><br>
-    <img src="task6-l_zero-p_nearest.png" width="650">
-    <img src="task6-l_zero-p_linear.png" width="650">
-    <img src="task6-l_nearest-p_nearest.png" width="650">
-    <img src="task6-l_nearest-p_linear.png" width="650">
-    <br><br>
-    We can see in these images that the most jagged option of the ones specified is <code>L_ZERO</code> and <code>P_NEAREST</code>, and the smoothest option is <code>L_NEAREST</code> and <code>P_LINEAR</code>. The difference between <code>L_ZERO</code> and <code>L_NEAREST</code> appears to be more dramatic than the difference between <code>P_NEAREST</code> and <code>P_LINEAR</code> for this rendered image.
-    <br><br>
-    As with the previous task, edge behavior was important to consider for avoiding errors. In <code>Texture::get_level</code>, we limited the range of possible return values such that it could only fall within the range of indexes of levels that truly exist. Also, for linear interpolation of levels, I initially failed to account for an edge case. Our program calculates the floor and the ceiling of the value returned by <code>Texture::get_level</code> to determine which two levels should be sampled, and I didn't anticipate that the two calculated values could be the same when the value returned by <code>Texture::get_level</code> is an integer. We weighted the color values based on the distance between the levels and the value returned by <code>Texture::get_level</code>; when this value was an integer, we would give each value a weight of 0, so the colors values would change to all zeros, which is rendered as black. To resolve this, I altered the function to only interpolate between two levels when there were two distinct levels. When there was only one, I would simply return the color value from the one level.
-    <br><br>
+
+
+
     <h2>Link</h2>
     Link to write-up: <a href="https://zacharyzollman.github.io/cs184-proj-webpage/proj1/index.html">https://zacharyzollman.github.io/cs184-proj-webpage/proj1/index.html</a>
     </main>
