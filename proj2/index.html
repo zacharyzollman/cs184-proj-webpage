@@ -71,7 +71,6 @@
 				<img src="task1-6-9.png" width="300">
 				<img src="task1-6-10.png" width="300">
 				<img src="task1-6-11.png" width="300">
-				<br><br>
 
 			<h3>Part 2: Bezier Surfaces with Separable 1D de Casteljau</h3>
 
@@ -120,7 +119,6 @@
 							}	  
 					</code>
 				</pre> 
-				<br><br>
 				<img src="task2.png" width="300">
 				<br><br>
 
@@ -161,6 +159,247 @@
 			<br><br>
 
 		<h3>Part 4: Edge Flip</h3>
+			The edge flip operation swaps the diagonal edge of two adjacent triangles to form two new triangles. To implement this operation, we first check if either of the two faces is a boundary face. If so, it returns an invalid iterator since the edge flip operation is not defined for boundary edges.
+			<br><br>
+			Otherwise, the code follows a series of steps to update the vertex and halfedge connectivity of the mesh to reflect the edge flip. It updates the vertex and halfedge pointers of the four vertices involved (A, B, C, D) and the six halfedges around the flipped edge (AtoB, BtoC, CtoA, CtoB, BtoD, DtoC). It also updates the edge pointers of the five edges involved (AB, AC, BCtoAD, CD, BD), as well as the face pointers of the two new triangles formed by the flip.
+			<br><br>
+			One interesting trick is to use assertions or unit tests to check that the mesh connectivity remains valid after the operation. This can help catch errors that might not be immediately obvious from visual inspection of the mesh.
+
+			<pre class="line-numbers">
+				<code class="language-clike">      
+				EdgeIter HalfedgeMesh::flipEdge(EdgeIter e0)
+					{
+					if (e0->halfedge()->face()->isBoundary() || e0->halfedge()->twin()->face()->isBoundary()) {
+						return EdgeIter();
+					}
+				
+					HalfedgeIter BtoC = e0->halfedge();
+					HalfedgeIter CtoA = BtoC->next();
+					HalfedgeIter AtoB = CtoA->next();
+					HalfedgeIter CtoB = BtoC->twin();
+					HalfedgeIter BtoD = CtoB->next();
+					HalfedgeIter DtoC = BtoD->next();
+				
+					VertexIter A = AtoB->vertex();
+					VertexIter B = BtoC->vertex();
+					VertexIter C = CtoB->vertex();
+					VertexIter D = DtoC->vertex();
+				
+					EdgeIter AB = AtoB->edge();
+					EdgeIter AC = CtoA->edge();
+					EdgeIter BCtoAD = BtoC->edge();
+					EdgeIter CD = DtoC->edge();
+					EdgeIter BD = BtoD->edge();
+				
+					FaceIter leftToUpper = CtoA->face();
+					FaceIter rightToLower = BtoD->face();
+				
+					CtoA->next() = BtoC;
+					CtoA->vertex() = C;
+					CtoA->edge() = AC;
+					CtoA->face() = leftToUpper;
+				
+					BtoD->next() = CtoB;
+					BtoD->vertex() = B;
+					BtoD->edge() = BD;
+					BtoD->face() = rightToLower;
+				
+					AtoB->next() = BtoD;
+					AtoB->vertex() = A;
+					AtoB->edge() = AB;
+					AtoB->face() = rightToLower;
+				
+					DtoC->next() = CtoA;
+					DtoC->vertex() = D;
+					DtoC->edge() = CD;
+					DtoC->face() = leftToUpper;
+				
+					BtoC->next() = DtoC;
+					BtoC->vertex() = A;
+					BtoC->edge() = BCtoAD;
+					BtoC->face() = leftToUpper;
+				
+					CtoB->next() = AtoB;
+					CtoB->vertex() = D;
+					CtoB->edge() = BCtoAD;
+					CtoB->face() = rightToLower;
+				
+					A->halfedge() = AtoB;
+					B->halfedge() = BtoD;
+					C->halfedge() = CtoA;
+					D->halfedge() = DtoC;
+				
+					AB->halfedge() = AtoB;
+					BD->halfedge() = BtoD;
+					CD->halfedge() = DtoC;
+					AC->halfedge() = CtoA;
+					BCtoAD->halfedge() = CtoB;
+				
+					rightToLower->halfedge() = BtoD;
+					leftToUpper->halfedge() = CtoA;
+
+					return BCtoAD;
+					}
+				</code>
+			</pre> 
+			<br><br>
+			<img src="task4-1.png" width="300">
+			<img src="task4-2.png" width="300">
+			<br><br>
+		
+		<h3>Part 5: Edge Split</h3>
+		The splitEdge function performs the split of an edge by creating a new vertex M in the middle of the edge and updating the connectivity information of the mesh accordingly. This function effectively splits the edge into two edges by adding a new vertex in the middle, and creates four new faces and five new edges to maintain the manifoldness of the mesh.
+		<br><br>
+		First, we check if either of the faces incident on the edge e0 is a boundary face. If so, we return a null VertexIter.We then obtain the halfedges and edges that are involved in the split, as well as the vertices, faces, and edges that we will create.We set the position of the new vertex M as the midpoint between the original vertices B and C. We update the halfedge connectivity information for each halfedge that is affected by the split. 
+		<br><br>
+		We create new halfedges AtoM, MtoA, BtoM, MtoB, DtoM, and MtoD and update their twins, next pointers, vertices, edges, and faces accordingly. Finally, we update the connectivity information of the edges, vertices, and faces that are affected by the split.
+		
+		<pre class="line-numbers">
+			<code class="language-clike">      
+			VertexIter HalfedgeMesh::splitEdge(EdgeIter e0)
+				{
+				  if (e0->halfedge()->face()->isBoundary() || e0->halfedge()->twin()->face()->isBoundary()) {
+					return VertexIter();
+				  }
+			  
+				  HalfedgeIter BtoC_MtoC = e0->halfedge();
+				  HalfedgeIter CtoA = BtoC_MtoC->next();
+				  HalfedgeIter AtoB = CtoA->next();
+				  HalfedgeIter CtoB_CtoM = BtoC_MtoC->twin();
+				  HalfedgeIter BtoD = CtoB_CtoM->next();
+				  HalfedgeIter DtoC = BtoD->next();
+			  
+				  EdgeIter AB = AtoB->edge();
+				  EdgeIter AC = CtoA->edge();
+				  EdgeIter BCtoCM = BtoC_MtoC->edge();
+				  EdgeIter CD = DtoC->edge();
+				  EdgeIter BD = BtoD->edge();
+			  
+				  FaceIter leftToUpperLeft = CtoA->face();
+				  FaceIter rightToUpperRight = BtoD->face();
+			  
+				  VertexIter A = AtoB->vertex();
+				  VertexIter B = BtoC_MtoC->vertex();
+				  VertexIter C = CtoB_CtoM->vertex();
+				  VertexIter D = DtoC->vertex();
+			  
+				  VertexIter M = newVertex();
+			  
+				  FaceIter lowerLeft = newFace();
+				  FaceIter lowerRight = newFace();
+			  
+				  EdgeIter AM = newEdge();
+				  EdgeIter BM = newEdge();
+				  EdgeIter DM = newEdge();
+			  
+				  HalfedgeIter AtoM = newHalfedge();
+				  HalfedgeIter MtoA = newHalfedge();
+				  HalfedgeIter BtoM = newHalfedge();
+				  HalfedgeIter MtoB = newHalfedge();
+				  HalfedgeIter DtoM = newHalfedge();
+				  HalfedgeIter MtoD = newHalfedge();
+			  
+				  M->position = B->position + (C->position - B->position) * 1/2;
+				  M->halfedge() = BtoC_MtoC;
+				  C->halfedge() = CtoA;
+				  D->halfedge() = DtoC;
+				  B->halfedge() = BtoD;
+				  A->halfedge() = AtoB;
+			  
+				  lowerLeft->halfedge() = MtoA;
+				  lowerRight->halfedge() = MtoB;
+				  leftToUpperLeft->halfedge() = CtoA;
+				  rightToUpperRight->halfedge() = CtoB_CtoM;
+			  
+				  AM->halfedge() = AtoM;
+				  BM->halfedge() = BtoM;
+				  DM->halfedge() = DtoM;
+				  AB->halfedge() = AtoB;
+				  BD->halfedge() = BtoD;
+				  CD->halfedge() = DtoC;
+				  AC->halfedge() = CtoA;
+				  BCtoCM->halfedge() = BtoC_MtoC;
+			  
+				  AtoM->twin() = MtoA;
+				  AtoM->next() = BtoC_MtoC;
+				  AtoM->vertex() = A;
+				  AtoM->edge() = AM;
+				  AtoM->face() = leftToUpperLeft;
+			  
+				  BtoC_MtoC->twin() = CtoB_CtoM;
+				  BtoC_MtoC->next() = CtoA;
+				  BtoC_MtoC->vertex() = M;
+				  BtoC_MtoC->edge() = BCtoCM;
+				  BtoC_MtoC->face() = leftToUpperLeft;
+			  
+				  CtoA->next() = AtoM;
+				  CtoA->vertex() = C;
+				  CtoA->edge() = AC;
+				  CtoA->face() = leftToUpperLeft;
+			  
+				  MtoA->twin() = AtoM;
+				  MtoA->next() = AtoB;
+				  MtoA->vertex() = M;
+				  MtoA->edge() = AM;
+				  MtoA->face() = lowerLeft;
+			  
+				  AtoB->next() = BtoM;
+				  AtoB->vertex() = A;
+				  AtoB->edge() = AB;
+				  AtoB->face() = lowerLeft;
+			  
+				  BtoM->twin() = MtoB;
+				  BtoM->next() = MtoA;
+				  BtoM->vertex() = B;
+				  BtoM->edge() = BM;
+				  BtoM->face() = lowerLeft;
+			  
+				  MtoB->twin() = BtoM;
+				  MtoB->next() = BtoD;
+				  MtoB->vertex() = M;
+				  MtoB->edge() = BM;
+				  MtoB->face() = lowerRight;
+			  
+				  BtoD->next() = DtoM;
+				  BtoD->vertex() = B;
+				  BtoD->edge() = BD;
+				  BtoD->face() = lowerRight;
+			  
+				  DtoM->twin() = MtoD;
+				  DtoM->next() = MtoB;
+				  DtoM->vertex() = D;
+				  DtoM->edge() = DM;
+				  DtoM->face() = lowerRight;
+			  
+				  MtoD->twin() = DtoM;
+				  MtoD->next() = DtoC;
+				  MtoD->vertex() = M;
+				  MtoD->edge() = DM;
+				  MtoD->face() = rightToUpperRight;
+			  
+				  DtoC->next() = CtoB_CtoM;
+				  DtoC->vertex() = D;
+				  DtoC->edge() = CD;
+				  DtoC->face() = rightToUpperRight;
+			  
+				  CtoB_CtoM->next() = MtoD;
+				  CtoB_CtoM->vertex() = C;
+				  CtoB_CtoM->edge() = BCtoCM;
+				  CtoB_CtoM->face() = rightToUpperRight;
+			  
+				  return M;
+				}
+			  
+			</code>
+		</pre> 
+		<br><br>
+		<img src="task5-1.png" width="300">
+		<img src="task5-2.png" width="300">
+		<img src="task5-3.png" width="300">
+		<br><br>
+
+
+
 
 
 
