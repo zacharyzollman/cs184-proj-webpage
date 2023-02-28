@@ -34,9 +34,9 @@
 
 				De Casteljau's algorithm is a recursive method to evaluate a Bezier curve. It works by dividing the control points into two subsets and calculating intermediate control points along the curve until a final point is reached.
 				<br></br>
-				The evaluateStep function uses a simplified version of de Casteljau's algorithm to evaluate a Bezier curve. It takes an input vector of control points and calculates the intermediate points along the curve using the current value of t. The function iterates over each pair of adjacent control points and calculates a new point on the curve using the current value of t. This new point is then added to a vector of intermediate points. The function returns this vector of intermediate points, which can be used to draw the Bezier curve.
+				The <code>evaluateStep</code> function uses a version of de Casteljau's algorithm to evaluate a Bezier curve. It takes an input vector of control points and calculates the intermediate points along the curve using the current value of t. The function iterates over each pair of adjacent control points and calculates a new point on the curve using the current value of t. This new point is then inserted in a vector of intermediate points. The function returns this vector of intermediate points, which can be used as a subsequent input to the <code>evaluateStep</code> function. This can be repeated until the output vector contains a single point; this point lies on the Bezier curve.
 				<br></br>
-				Note that this function only calculates a single step of the de Casteljau algorithm, so it needs to be called multiple times with different values of t in order to fully evaluate the curve.
+				Note that this process only calculates a single point of the de Casteljau algorithm, so it needs to be repeated with different values of t in order to fully evaluate the curve.
 				<br></br>
 
 
