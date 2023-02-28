@@ -20,11 +20,11 @@
     <h4>Abdul Ali Khan, Zachary Zollman</h4>
     
     <h2>Overview</h2>
-	In this assignment, We implemented Bezier curves and surfaces using de Casteljau's algorithm. The algorithm recursively evaluates the curve by dividing the control points into two subsets and calculating intermediate control points along the curve until a final point is reached. We used the algorithm to evaluate Bezier curves and surfaces and provided screenshots to show the intermediate steps.
+	In this assignment, we implemented Bezier curves and surfaces using de Casteljau's algorithm. This algorithm involves recursively dividing a curve's control points into two subsets and calculating intermediate control points along the curve until a final point is reached. We used this algorithm to evaluate Bezier curves and surfaces and provided screenshots to show the intermediate steps.
 	<br></br>
 	We also implemented area-weighted vertex normals for triangle meshes. The area-weighted vertex normal at a given vertex is the weighted average of the normals of the adjacent faces, where each weight is proportional to the area of the corresponding face that shares the vertex. We provided screenshots to show the difference between shading with and without vertex normals.
 	<br></br>
-	Finally, we implemented an edge flip operation for local remeshing of a triangle mesh. The flip operation swaps the diagonal of a quadrilateral formed by two adjacent triangles, which can improve the quality of the mesh. We provided screenshots to show the effect of the edge flip operation on the mesh.
+	Additionally, we implemented edge flip and edge split operations, which we then used to implement loop subdivision for mesh upsampling. The flip operation swaps the diagonal of a quadrilateral formed by two adjacent triangles; rather than connecting the two vertices it initially connected, the diagonal then connects the other two vertices of the quadrilateral. The split operation creates a new vertex, dividing the diagonal edge of a quadrilateral formed by two triangles into two connected edges and adding two new edges connecting the vertices not on the original diagonal to the new point. We combine these in subdivision, which involves adding mesh elements to reduce the coarseness of a mesh. We provided screenshots to show the effect of the edge flip and edge split operations on the mesh, as well as loop subdivision.
 	<br></br>
 	Through this assignment, we learned about de Casteljau's algorithm for evaluating Bezier curves and surfaces, as well as the importance of normal vectors for shading in computer graphics. We also learned about local remeshing operations such as edge flip and how they can improve the quality of a mesh.
 	<br></br>
