@@ -397,7 +397,8 @@
 		<img src="task5-2.png" width="450">
 		<img src="task5-3.png" width="450">
 		<br><br>
-
+		<h3>Part 6: Loop Subdivision for Mesh Upsampling</h3>
+		<br><br>
 		Essentially, in order to implement loop subdivision, I calculated new vertex positions, split original mesh edges, flipped new edges that were connected to old vertices, and updated vertex positions.
 		<br><br>
 		To go into more detail, I performed these steps in loops for elements that were not on boundaries (as determined by the isBoundary function). I started by calculating new positions for existing vertices using the formula provided in the assignment instructions. This involved determining the degree of the vertex (which was straightforward since a function for doing so was provided), the appropriate value for the variable u (which depended on the degree of the vertex), and the sum of the positions of the vertex’s neighbors (which involved iterating through the neighbors and summing the values of their position fields). Next, I calculated new positions for new vertices using the other provided formula. To do so, I found the vertices of the two triangles sharing the edge where the new vertex would go and calculated a weighted sum according to the formula. Next, I split each edge in the mesh that connected old vertices. Each call to the edge-splitting function returned the newly-created vertex (in the form of a VertexIter), which allowed me to mark the vertex as new and update its position in this loop of the function. In the next loop, I went through all of the edges and flipped the new edges that connected an old vertex and a new vertex. In the final loop, I transferred the position values for the original vertices from the temporary placeholder field to the actual position field.
@@ -405,6 +406,32 @@
 		In terms of debugging, I noticed that my initial implementation of subdivision resulted in the mesh disappearing. This confused me at first, but then I hypothesized that the new positions I was assigning might be faulty. I stepped through with the debugger, and indeed, I was assigning new points the position (0,0,0) due to a floating point division error. After resolving this, I observed that the subdivided mesh included black triangles. I was unsure of the cause of this. Eventually, I considered that it might be due to the edge flipping part of the subdivision process. I tried commenting this part out and observed that the black triangles disappeared. I looked closer at the edge flipping logic and realized that I was flipping more edges than necessary; I wasn’t excluding edges that had initially been part of the mesh correctly. Once I fixed this, I observed on the beetle file that boundary edges extended in an unexpected manner when I subdivided the edges. I then wrapped the insides of the loops in checks for whether the features were edges, and this solved the problem.
 		<br><br>
 		<img src="task6-0-0.png" width="450">
+		<img src="task6-0-1.png" width="450">
+		<img src="task6-0-2.png" width="450">
+		<br><br>
+		Unsurprisingly, subdivided meshes have noticeably more faces and edges. Also, the sharp edges are smoothed out by subdivision.
+		<br><br>
+		<img src="task6-1-0.png" width="450">
+		<img src="task6-1-1.png" width="450">
+		<img src="task6-1-2.png" width="450">
+		<img src="task6-1-3.png" width="450">
+		<img src="task6-1-4.png" width="450">
+		<br><br>
+		Interestingly, subdivision does result in an asymmetric form for the cube. However, if I split the diagonal edge on each face before subdividing, then the resulting form is symmetrical.
+		<br><br>
+		<img src="task6-2-0.png" width="450">
+		<img src="task6-2-1.png" width="450">
+		<img src="task6-2-2.png" width="450">
+		<img src="task6-2-3.png" width="450">
+		<img src="task6-2-4.png" width="450">
+		<br><br>
+		This makes sense because the updated position that we calculate for an existing vertex is dependent upon the vertex’s neighbors. With the default edges, for some vertices of the cube, the distribution of neighboring vertices is far from symmetric. For example, for the vertex at the center of the below image, the vertex has a neighbor at each corner of each connected face, except for the lower right face (where it is missing the vertex that it would connect to diagonally).
+		<br><br>
+		<img src="task6-3-0.png" width="450">
+		<br><br>
+		In contrast, when I split the edges, the distribution of neighboring vertices becomes symmetric. Thus, the new positions that we calculate will be similarly more symmetric.
+		<br><br>
+		<img src="task6-3-1.png" width="450">
 
 
 
