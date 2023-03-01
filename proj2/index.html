@@ -252,7 +252,7 @@
 		<h3>Part 5: Edge Split</h3>
 		The <code>splitEdge</code> function performs the split of an edge by creating a new vertex M in the middle of the edge, adding edges that connect to the new vertex, adding halfedges to go along with these new edges, adding faces to correspond to the new triangles, and updating the features of the mesh accordingly. This function effectively splits two triangles into four.
 		<br><br>
-		First, we check if either of the faces incident on the edge e0 is a boundary face.
+		First, we check if either of the faces incident on the edge that is passed in to the function is a boundary face.
 		 If it is, we return a null <code>VertexIter</code>. We then obtain the features that are involved in the split (halfedges, edges, faces, and vertices).
 		  Next, we create a new vertex, two new faces, three new edges, and six new halfedges. We set the position of the new vertex M as the midpoint between the original vertices B and C. We update the connectivity information for eachedge, halfedge, vertex, and face. 
 		  For the inner edges, we specify the twins of the halfedges (since they are either entirely new or their twin is being modified), but not for the old edges on the outer perimeter (since their halfedges already have twins and we aren't modifying them). We then return the new point.
