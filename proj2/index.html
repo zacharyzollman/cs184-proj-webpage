@@ -119,16 +119,18 @@
 							}	  
 					</code>
 				</pre> 
-				<img src="task2.png" width="450">
+				<img src="task2.png" width="750">
 				<br><br>
 
 	<h2>Section II: Triangle Meshes and Half-Edge Data Structure</h2>
 		<h3>Part 3: Area-Weighted Vertex Normals</h3>
 			The area-weighted vertex normal at a given vertex is a vector that is the weighted average of the normals of the adjacent faces, where each weight is proportional to the area of the corresponding face that shares the vertex.
 			<br><br>
-			The normal() function calculates the area-weighted vertex normal for a given vertex. We first initialize the result vector and the total area to zero. We then iterate over the half-edges that are adjacent to the vertex.
+			The <code>normal</code> function calculates the area-weighted vertex normal for a given vertex. We first initialize the result vector and the total area to zero. We then iterate over the half-edges that are adjacent to the vertex.
 			<br><br>
-			For each half-edge, we calculate the cross product of the vectors formed by the positions of the adjacent vertices of the current half-edge and the next two half-edges, which gives the normal of the corresponding triangle. We add this normal to the result vector and increments the total area by half of the norm of the cross product. This is because the area of a triangle is proportional to the norm of its cross product. Finally, the function returns the normalized result vector divided by the total area, which gives the area-weighted vertex normal.
+			For each half-edge, we calculate the cross product of the vectors formed by the positions of the adjacent vertices of the current half-edge and the next two half-edges, which gives the normal of the corresponding triangle. We add this cross product to the result vector and add half of the norm of the cross product to the total area. This makes sense because the area of a triangle is proportional to the norm of its cross product.
+			<br><br>
+			After iterating through the edges, the function returns the normalized result vector divided by the total area, which gives the area-weighted vertex normal.
 			<br><br>
 
 			<pre class="line-numbers">
@@ -154,8 +156,8 @@
 			</pre> 
 
 			<br><br>
-			<img src="task3-1.png" width="450">
-			<img src="task3-2.png" width="450">
+			<img src="task3-1.png" width="750">
+			<img src="task3-2.png" width="750">
 			<br><br>
 
 		<h3>Part 4: Edge Flip</h3>
