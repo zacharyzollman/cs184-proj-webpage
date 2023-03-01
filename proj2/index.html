@@ -75,8 +75,8 @@
 			<h3>Part 2: Bezier Surfaces with Separable 1D de Casteljau</h3>
 
 				The de Casteljau algorithm can be extended to evaluate Bezier surfaces by first evaluating sets of control points along one axis using the procecure described above (each set with the same parameter) to obtain points on Bezier curves.
-				The resulting set of points can then be used as control points for another Bezier curve along the other axis. The parameter used to evaluate this set can be different. Evaluating this in the same manner yields a point that is on the Bezier surface.
-				This procedure can be repeated with different parameters to obtain more points on the surface.
+				 The resulting set of points can then be used as control points for another Bezier curve along the other axis. The parameter used to evaluate this set can be different. Evaluating this in the same manner yields a point that is on the Bezier surface.
+				 This procedure can be repeated with different parameters to obtain more points on the surface.
 				<br><br>
 				The <code>evaluateStep</code> function is similar to the 1D Bezier curve case, but is called with a parameter t and a vector of control points for one of the axes of the surface. The <code>evaluate1D</code> function uses a while loop to repeatedly call <code>evaluateStep</code> until only one point remains. This final point represents the evaluation of one Bezier curve along one of the axes.
 				<br><br>
@@ -165,7 +165,7 @@
 			<br><br>
 			Otherwise, the code follows a series of steps to update the vertex and halfedge connectivity of the mesh to reflect the edge flip. It updates the vertex and halfedge pointers of the four vertices involved (A, B, C, D) and the six halfedges around the flipped edge (which we called AtoB, BtoC, CtoA, CtoB, BtoD, and DtoC). It also updates the edge pointers of the five edges involved (which we called AB, AC, BCtoAD, CD, and BD), as well as the pointers of the two triangle faces.
 			<br><br>
-			We didn't experience an eventful debugging journey, but one interesting debugging trick could be to use unit tests to check that the mesh connectivity remains valid after the operation. This could help catch errors that might not be immediately obvious from visual inspection of the mesh.
+			One interesting aspect of our implementation is that it doesn't modify halfedge's neighbors because we realized that the neighbors should remain the same. We didn't experience an eventful debugging journey, but one debugging trick could be to use unit tests to check that the mesh connectivity remains valid after the operation. This could help catch errors that might not be immediately obvious from visual inspection of the mesh.
 
 			<pre class="line-numbers">
 				<code class="language-clike">      
@@ -250,11 +250,16 @@
 			<br><br>
 		
 		<h3>Part 5: Edge Split</h3>
-		The splitEdge function performs the split of an edge by creating a new vertex M in the middle of the edge and updating the connectivity information of the mesh accordingly. This function effectively splits the edge into two edges by adding a new vertex in the middle, and creates four new faces and five new edges to maintain the manifoldness of the mesh.
+		The <code>splitEdge</code> function performs the split of an edge by creating a new vertex M in the middle of the edge, adding edges that connect to the new vertex, adding halfedges to go along with these new edges, adding faces to correspond to the new triangles, and updating the features of the mesh accordingly. This function effectively splits two triangles into four.
 		<br><br>
-		First, we check if either of the faces incident on the edge e0 is a boundary face. If so, we return a null VertexIter.We then obtain the halfedges and edges that are involved in the split, as well as the vertices, faces, and edges that we will create.We set the position of the new vertex M as the midpoint between the original vertices B and C. We update the halfedge connectivity information for each halfedge that is affected by the split. 
+		First, we check if either of the faces incident on the edge e0 is a boundary face.
+		 If it is, we return a null <code>VertexIter</code>. We then obtain the features that are involved in the split (halfedges, edges, faces, and vertices).
+		  Next, we create a new vertex, two new faces, three new edges, and six new halfedges. We set the position of the new vertex M as the midpoint between the original vertices B and C. We update the connectivity information for eachedge, halfedge, vertex, and face. 
+		  For the inner edges, we specify the twins of the halfedges (since they are either entirely new or their twin is being modified), but not for the old edges on the outer perimeter (since their halfedges already have twins and we aren't modifying them). We then return the new point.
+		  <br><br>
+		  In order to determine what we needed to update, we drew out a diagram of a section of hypothetical mesh before and after splitting, and used that to identify what changed in the split.
 		<br><br>
-		We create new halfedges AtoM, MtoA, BtoM, MtoB, DtoM, and MtoD and update their twins, next pointers, vertices, edges, and faces accordingly. Finally, we update the connectivity information of the edges, vertices, and faces that are affected by the split.
+		In terms of debugging, I noticed that one of the edges (and one of its associated halfedges) was spanning the full diagonal after splitting, when I only expected it to go halfway. I initially assigned the wrong vertex to one of the halfedges. Specifically, it was the halfedge that initially went across the diagonal, but then went from the middle of the diagonal to one end. Due to my naming convention, I followed the pattern and assigned it the vertex that it initially started at, instead of teh new, middle vertex.
 		
 		<pre class="line-numbers">
 			<code class="language-clike">      
