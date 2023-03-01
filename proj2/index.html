@@ -74,7 +74,9 @@
 
 			<h3>Part 2: Bezier Surfaces with Separable 1D de Casteljau</h3>
 
-				The de Casteljau algorithm can be extended to evaluate Bezier surfaces by first evaluating a set of Bezier curves along one axis (e.g. u-axis) using the algorithm for 1D Bezier curves. The resulting set of points are then used as control points for another set of Bezier curves along the other axis (e.g. v-axis). The final point on the surface is then obtained by evaluating the resulting curve at a specific value of v.
+				The de Casteljau algorithm can be extended to evaluate Bezier surfaces by first evaluating sets of control points along one axis using the procecure described above (each set with the same parameter) to obtain points on Bezier curves.
+				The resulting set of points can then be used as control points for another Bezier curve along the other axis. The parameter used to evaluate this set can be different. Evaluating this in the same manner yields a point that is on the Bezier surface.
+				This procedure can be repeated with different parameters to obtain more points on the surface.
 				<br><br>
 				The evaluateStep function is the same as in the 1D Bezier curve case, but is called with a vector of control points for one of the axes of the surface. The evaluate1D function uses a while loop to repeatedly call evaluateStep until only one point remains. This final point represents the evaluation of the Bezier curve along one of the axes.
 				<br><br>
