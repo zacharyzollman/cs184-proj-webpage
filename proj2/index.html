@@ -161,11 +161,11 @@
 			<br><br>
 
 		<h3>Part 4: Edge Flip</h3>
-			The edge flip operation swaps the diagonal edge of two adjacent triangles to form two new triangles. To implement this operation, we first check if either of the two faces is a boundary face. If so, it returns an invalid iterator since the edge flip operation is not defined for boundary edges.
+			The edge flip operation swaps the diagonal edge of two adjacent triangles to form two new triangles. To implement this operation, we first check if either of the two faces is a boundary face. If so, the function returns since the edge flip operation is not defined for boundary edges.
 			<br><br>
-			Otherwise, the code follows a series of steps to update the vertex and halfedge connectivity of the mesh to reflect the edge flip. It updates the vertex and halfedge pointers of the four vertices involved (A, B, C, D) and the six halfedges around the flipped edge (AtoB, BtoC, CtoA, CtoB, BtoD, DtoC). It also updates the edge pointers of the five edges involved (AB, AC, BCtoAD, CD, BD), as well as the face pointers of the two new triangles formed by the flip.
+			Otherwise, the code follows a series of steps to update the vertex and halfedge connectivity of the mesh to reflect the edge flip. It updates the vertex and halfedge pointers of the four vertices involved (A, B, C, D) and the six halfedges around the flipped edge (which we called AtoB, BtoC, CtoA, CtoB, BtoD, and DtoC). It also updates the edge pointers of the five edges involved (which we called AB, AC, BCtoAD, CD, and BD), as well as the pointers of the two triangle faces.
 			<br><br>
-			One interesting trick is to use assertions or unit tests to check that the mesh connectivity remains valid after the operation. This can help catch errors that might not be immediately obvious from visual inspection of the mesh.
+			We didn't experience an eventful debugging journey, but one interesting debugging trick could be to use unit tests to check that the mesh connectivity remains valid after the operation. This could help catch errors that might not be immediately obvious from visual inspection of the mesh.
 
 			<pre class="line-numbers">
 				<code class="language-clike">      
@@ -245,8 +245,8 @@
 				</code>
 			</pre> 
 			<br><br>
-			<img src="task4-1.png" width="450">
-			<img src="task4-2.png" width="450">
+			<img src="task4-1.png" width="800">
+			<img src="task4-2.png" width="800">
 			<br><br>
 		
 		<h3>Part 5: Edge Split</h3>
