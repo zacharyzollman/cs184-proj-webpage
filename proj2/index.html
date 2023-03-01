@@ -78,11 +78,9 @@
 				The resulting set of points can then be used as control points for another Bezier curve along the other axis. The parameter used to evaluate this set can be different. Evaluating this in the same manner yields a point that is on the Bezier surface.
 				This procedure can be repeated with different parameters to obtain more points on the surface.
 				<br><br>
-				The evaluateStep function is the same as in the 1D Bezier curve case, but is called with a vector of control points for one of the axes of the surface. The evaluate1D function uses a while loop to repeatedly call evaluateStep until only one point remains. This final point represents the evaluation of the Bezier curve along one of the axes.
+				The <code>evaluateStep</code> function is similar to the 1D Bezier curve case, but is called with a parameter t and a vector of control points for one of the axes of the surface. The <code>evaluate1D</code> function uses a while loop to repeatedly call <code>evaluateStep</code> until only one point remains. This final point represents the evaluation of one Bezier curve along one of the axes.
 				<br><br>
-				The evaluate function first evaluates the set of Bezier curves along one axis (using evaluate1D) to obtain a set of control points for the other axis. It then evaluates another set of Bezier curves along the other axis (again using evaluate1D) to obtain the final point on the surface.
-				<br><br>
-				The algorithm is used to recursively subdivide the control points of a Bezier surface into smaller sets until a final point is reached, allowing for the evaluation of the surface at any given u,v position.
+				The <code>evaluate</code> function first evaluates the set of Bezier curves along one axis (using <code>evaluate1D</code>) to obtain a set of control points for the other axis. It then evaluates this set of control points (again using <code>evaluate1D</code>) to obtain a point on the Bezier surface. This function can be called with different values of the parameters <code>u</code> and <code>v</code> to obtain different points on the surface.
 				<br><br>
 
 				<pre class="line-numbers">
