@@ -30,11 +30,6 @@
 
 	<h2>Part 1: Bezier Curves with 1D de Casteljau Subdivision</h2>
 			
-			<br></br>
-
-
-			
-			<br></br>
 			<h3>Walk through the ray generation and primitive intersection parts of the rendering pipeline.</h3>
 
 			The rendering pipeline starts with the generation of a camera ray for each pixel in the image. For each pixel, the raytrace_pixel function is called which generates ns_aa camera rays and traces them through the scene. In the generate_ray function of the Camera class, given the pixel coordinates (x, y) as input, the position of the input sensor sample coordinate on the canonical sensor plane one unit away from the pinhole is computed. The pinhole camera model is used to map the 2D pixel coordinates onto a 3D ray direction. The ray direction is computed by finding the coordinates on the canonical plane and the transforming from camera space to world space.
