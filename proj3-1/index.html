@@ -10,6 +10,8 @@
     <style>
       h1 {text-align: center;}
       h5 {text-align: center;}
+	  table, th, td { border: 1px solid black;}
+	  th, td { padding: 10px; text-align: center;}
       </style>
   </head>
   
@@ -53,11 +55,35 @@
 			<img src="peter.png" width="450">
 			<br><br>
 		<h3>Compare rendering times on a few scenes with moderately complex geometries with and without BVH acceleration. Present your results in a one-paragraph analysis.</h3>
-			Rendering runtime speedup with BVH:
-			cow.dae 5.6316s → 0.0385s
-			beetle.dae 8.3990s → 0.0370s
-			teapot.dae 2.1325s → 0.0415s
-			maxplanck.dae 75.1357s → 0.0460s
+			<h4>Rendering runtime speedup with BVH</h4>
+			<table>
+				<tr>
+					<th>file</th>
+					<th>Initial time</th>
+					<th>Time with BVH acceleration</th>
+				</tr>
+				<tr>
+					<td>cow.dae</td>
+					<td>5.6316s</td>
+					<td>0.0385s</td>
+				</tr>
+				<tr>
+					<td>beetle.dae</td>
+					<td>8.3990s</td>
+					<td>0.0370s</td>
+				</tr>
+				<tr>
+					<td>teapot.dae</td>
+					<td>2.1325s</td>
+					<td>0.0415s</td>
+				</tr>
+				<tr>
+					<td>maxplanck.dae</td>
+					<td>75.1357s</td>
+					<td>0.0460s</td>
+				</tr>
+			</table>
+			<br><br>
 			By using a BVH, the number of ray-primitive intersection tests can be greatly reduced, especially in scenes with many primitives. For example, in a scene with a large flat plane and many small objects scattered across it, most rays will not intersect the plane, and a BVH can be used to quickly skip the entire plane when testing those rays. Similarly, in a scene with many overlapping objects, a BVH can be used to quickly skip entire groups of objects that are occluded by other objects.
 		
 	<h2>Part 3: Direct Illumination</h2>
@@ -82,13 +108,15 @@
 			<img src="CBbunny_H_16_8 3.png" width="450">
 			<h4>Image rendered with 64 light ray using uniform hemisphere sampling</h4>
 			<img src="CBbunny_H_16_8 4.png" width="450">
+			<br><br>
 			Uniform hemisphere sampling samples points on a hemisphere centered around the surface normal, while lighting sampling only samples points on the surface of light sources in the scene. The advantage of uniform hemisphere sampling is its simplicity and ease of implementation, as well as its ability to capture indirect lighting effects. However, it can lead to a significant amount of noise and inaccuracy in areas of the scene that are not well lit. Lighting sampling, on the other hand, is a more accurate and efficient method for estimating direct lighting since it only samples from light sources, but it requires more complicated implementation and can potentially miss some light sources. In practice, a combination of both techniques is often used to achieve a balance between efficiency and accuracy.
+			
 
 	<h2>Part 4: Global Illumination</h2>
 
 		<h3>Walk through your implementation of the indirect lighting function.</h3>
 			In order to implement indirect lighting we first need to compute the indirect light that is being emitted from the objects in our scene. This is accomplished by using global illumination which simulates the way light bounces around a scene to create indirect lighting. Monte Carlo integration involves shooting rays from the camera into the scene and tracing them as they bounce around until they eventually hit a light source or reach a maximum number of bounces. This process generates a set of samples that we can use to estimate the indirect lighting in each pixel of our image. 
-			Once we have computed the indirect lighting samples, we can use them to perform the final step of rendering our scene. THis involves adding the direct lighting and the indirect lighting together to get the final color of each pixel. We can also use the indirect lighting samples to perform other effects such as ambient occlusion or soft shadows. The quality of our image will depend on the number of samples we use for both direct and indirect lighting, as well as the complexity of our scene and the materials used on the objects. 
+			Once we have computed the indirect lighting samples, we can use them to perform the final step of rendering our scene. This involves adding the direct lighting and the indirect lighting together to get the final color of each pixel. We can also use the indirect lighting samples to perform other effects such as ambient occlusion or soft shadows. The quality of our image will depend on the number of samples we use for both direct and indirect lighting, as well as the complexity of our scene and the materials used on the objects. 
 
 		<h3>Images rendered with global (direct and indirect) illumination at 1024 samples per pixel.</h3>
 			<br><br>
