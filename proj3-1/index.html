@@ -48,6 +48,8 @@
 			<br><br>
 			<img src="CBlucy.png" width="450">
 			<br><br>
+
+		<h3>Challenges</h3>
 			In terms of challenges, we inititially struggled with converting from image space to camera space. We initially tried translating the (x, y) coordinates by (-0.5, -0.5). However, we didn't scale by 2, so this didn't work. We then tried removing the translation, and eventually realized (after consulting Ed) that we needed both translation and scaling. Also, when we started to look at the spec for part 2, we noticed tried rendering the cow. We noticed that we could see the different primitives and their edges showing on the surface despite the expected output being smooth curves. In order to fix this discrepancy, we changed the way we interpolated vertex normals with barycentric coordinates instead of Moller-Trumbore based on comments on Ed. 
 
 	<h2>Part 2: Bounding Volume Hierarchy</h2>
