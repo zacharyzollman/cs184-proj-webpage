@@ -85,7 +85,9 @@
 			</table>
 			<br><br>
 			By using a BVH, the number of ray-primitive intersection tests can be greatly reduced, especially in scenes with many primitives. For example, in a scene with a large flat plane and many small objects scattered across it, most rays will not intersect the plane, and a BVH can be used to quickly skip the entire plane when testing those rays. Similarly, in a scene with many overlapping objects, a BVH can be used to quickly skip entire groups of objects that are occluded by other objects.
-		
+			<br><br>
+			Challenges for this task included constructing the BVH in a manner that divides the mesh both vertically and horizontally. Furthermore finding a split point was difficult and took many iterations. For the acceleration portion we were not recursively calling the left and right nodes which caused feedback issues and our initial has_interaction function was too complicated where the speedup was only around 2s and not the desired 0.0385s. In order to address this problem we added broader checks that look at the bounding box and ray intersection to determine if interactions in ths future might occur. 
+
 	<h2>Part 3: Direct Illumination</h2>
 		<h3>Walk through both implementations of the direct lighting function.</h3>
 			The <code>estimate_direct_lighting_hemisphere</code> function estimates the lighting from a given intersection coming directly from a light source by uniformly sampling a hemisphere. It first constructs a coordinate system at the hit point with the normal vector aligned with the Z direction. Then, it calculates the outgoing direction of the ray and generates a number of samples, for each of which it generates a new ray in a random direction in the hemisphere around the hit point. For each new ray, it checks if it intersects any object in the scene before it reaches a light source, and if so, it calculates the reflectance of the surface at the hit point and multiplies it by the emission of the intersected object, weighted by the cosine of the angle between the normal and the incoming ray. Finally, it averages the accumulated radiance across all the samples to estimate the direct lighting.
