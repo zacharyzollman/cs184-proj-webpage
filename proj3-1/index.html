@@ -17,188 +17,80 @@
     <main>
 
     <h1>Project 3-1: Pathtracer</h1>
-	<h4>Part 1: Ray Generation and Scene Intersection	</h4>
     <h4>Abdul Ali Khan, Zachary Zollman</h4>
 	
     
     <h2>Overview</h2>
-	The project involves implementing a simple path tracer that can render 3D scenes with diffuse and specular surfaces, using techniques like Monte Carlo integration and importance sampling to generate accurate estimates of the radiance in the scene. 
-
-	The project is divided into several parts, each building on the previous one. In Part 1, we implement a basic ray tracer that can render simple 3D scenes with point lights and diffuse surfaces. We implement classes for Ray, Camera, and Primitive (which includes classes for Sphere and Triangle), and add support for computing the intersection between a ray and a primitive.
-
+		This project is focused on implementing a basic Path Tracer which is a rendering technique that simulates the behavior of light in a scene by tracing the path of light rays as they bounce around and interact with objects in the scene. The project is divided into five parts, each focusing on a different aspect of the Path Tracer.
+		In Part 1, we implemented the basic ray generation and primitive intersection parts of the rendering pipeline. We also explained the triangle intersection algorithm used to determine if a ray intersects a triangle in the scene. In Part 2, we implemented a Bounding Volume Hierarchy (BVH) construction algorithm to speed up rendering times for scenes with complex geometry. We explained the heuristic used to pick the splitting point and compared rendering times with and without BVH acceleration. In Part 3, we implemented both uniform hemisphere sampling and light sampling for the direct lighting function. We compared noise levels in soft shadows for different numbers of light rays and samples per pixel. In Part 4, we implemented the indirect lighting function and compared rendered views with only direct illumination and only indirect illumination. We also compared views with different maximum ray depths and sample-per-pixel rates. In Part 5, we implemented adaptive sampling and rendered two scenes with clearly visible differences in sampling rates over various regions and pixels.
+		Overall, this project provided an in-depth understanding of various concepts related to the Path Tracer, including ray tracing, Bounding Volume Hierarchies, direct and indirect lighting functions, and adaptive sampling. The project allowed us to implement these concepts in code and compare the results with different settings and parameters. We also gained a better understanding of the importance of optimization techniques to achieve faster rendering times for complex scenes.	
 	<br></br>
-
-	<h2>Part 1: Bezier Curves with 1D de Casteljau Subdivision</h2>
-			
-			<h3>Walk through the ray generation and primitive intersection parts of the rendering pipeline.</h3>
-
-			The rendering pipeline starts with the generation of a camera ray for each pixel in the image. For each pixel, the raytrace_pixel function is called which generates ns_aa camera rays and traces them through the scene. In the generate_ray function of the Camera class, given the pixel coordinates (x, y) as input, the position of the input sensor sample coordinate on the canonical sensor plane one unit away from the pinhole is computed. The pinhole camera model is used to map the 2D pixel coordinates onto a 3D ray direction. The ray direction is computed by finding the coordinates on the canonical plane and the transforming from camera space to world space.
-
+	
+	<h2>Part 1: Bezier Curves with 1D de Casteljau Subdivision</h2>	
+		<h3>Walk through the ray generation and primitive intersection parts of the rendering pipeline.</h3>
+			The rendering pipeline starts with the generation of a camera ray for each pixel in the image. For each pixel, the raytrace_pixel function is called which generates ns_aa camera rays and traces them through the scene. In the generate_ray function of the Camera class, given the pixel coordinates (x, y) as input, the position of the input sensor sample coordinate on the canonical sensor plane one unit away from the pinhole is computed. The pinhole camera model is used to map the 2D pixel coordinates onto a 3D ray direction. The ray direction is computed by finding the coordinates on the canonical plane and then transforming from camera space to world space.
 			In the raytrace_pixel function of the PathTracer class, ns_aa camera rays are generated and traced through the scene. For each sample, a random offset is added to the pixel coordinates to generate a different camera ray. The generated ray is then passed to the est_radiance_global_illumination function which traces the ray through the scene and computes the radiance at the intersection point. The computed radiance value is accumulated in the c vector. After all the samples are processed, the accumulated radiance values are averaged by dividing by the number of samples, and the resulting color is written to the sample buffer using the update_pixel function of the SampleBuffer class.
-
-			<pre class="line-numbers">
-				<code class="language-clike">      
-					Ray Camera::generate_ray(double x, double y) const {
-
-						// TODO (Part 1.1):
-						// compute position of the input sensor sample coordinate on the
-						// canonical sensor plane one unit away from the pinhole.
-						// Note: hFov and vFov are in degrees.
-					  
-							double x_normalized = (x - 0.5) * 2;
-							double y_normalized = (y - 0.5) * 2;
-							double x_ = tan(radians(hFov / 2)) * x_normalized;
-							double y_ = tan(radians(vFov / 2)) * y_normalized;
-					  
-							Vector3D vec = c2w * Vector3D(x_, y_, -1);
-					  
-							double min_t = nClip;
-							double max_t = fClip;
-					  
-							Ray r = Ray(pos, vec);
-							r.min_t = min_t;
-							r.max_t = max_t;
-					  
-							return r;
-					  }				
-				</code>
-			</pre>  
-			<br></br>
-			<pre class="line-numbers">
-				<code class="language-clike">      
-					void PathTracer::raytrace_pixel(size_t x, size_t y) {
-						// TODO (Part 1.2):
-						// Make a loop that generates num_samples camera rays and traces them
-						// through the scene. Return the average Vector3D.
-						// You should call est_radiance_global_illumination in this function.
-					  
-						int samples = ns_aa;
-						Vector2D pixel_origin = Vector2D(x, y);
-						Vector3D c = Vector3D(0, 0, 0);
-					  
-					  
-						for (int i = 0; i < samples; i++){
-							Vector2D sample = gridSampler->get_sample();
-							sample.x += pixel_origin.x;
-							sample.y += pixel_origin.y;
-					  
-							double x_ = sample.x/sampleBuffer.w;
-							double y_ = sample.y/sampleBuffer.h;
-							Ray ray = camera->generate_ray(x_, y_);
-							c += est_radiance_global_illumination(ray);
-						}
-					  
-						Vector3D c_ = c/samples;
-					  
-						sampleBuffer.update_pixel(c_, x, y);
-					}		
-				</code>
-			</pre>  
-
 			
-			<h3>Explain the triangle intersection algorithm you implemented in your own words.</h3>
-
+		<h3>Explain the triangle intersection algorithm you implemented in your own words.</h3>
 			The triangle intersection algorithm uses Möller-Trumbore to determine whether a given ray intersects with a triangle in 3D space, and if so, calculates the intersection point and normal vector. First calculate two vectors from the vertices of the triangle, and a third vector from the origin of the ray to one of the triangle vertices. The algorithm then calculates the barycentric coordinates of the intersection point. 
-			
 			These coordinates are used to interpolate the normal vector at the intersection point by taking a weighted sum of the normals at the three vertices of the triangle. The intersection point and normal vector are then stored in an Intersection object. There are also checks to make sure the determinant of the matrix is not negative and that the intersection point is within the valid range of the ray's parameters and that barycentric coordinates are within [0,1]. 
-
-			<pre class="line-numbers">
-				<code class="language-clike">      
-					bool Triangle::has_intersection(const Ray &r) const
-					{
-					  // Part 1, Task 3: implement ray-triangle intersection
-					  // The difference between this function and the next function is that the next
-					  // function records the "intersection" while this function only tests whether
-					  // there is a intersection.
-				
-					  Vector3D e1 = p2 - p1;
-					  Vector3D e2 = p3 - p1;
-					  Vector3D s = r.o - p1;
-				
-					  Vector3D s1 = cross(r.d, e2);
-					  Vector3D s2 = cross(s, e1);
-				
-					  double div = dot(s1, e1);
-					  double t = dot(s2, e2) / div;
-					  double b1 = dot(s1, s) / div;
-					  double b2 = dot(s2, r.d) / div;
-					  double b3 = 1 - b1 - b2;
-				
-					  if (div == 0)
-						return false;
-				
-					  if (t < r.min_t || t > r.max_t)
-						return false;
-					  if (b1 < 0 || b1 > 1)
-						return false;
-					  if (b2 < 0 || b2 > 1)
-						return false;
-					  if (b3 < 0 || b3 > 1)
-						return false;
-					  return true;
-					}
-				
-					bool Triangle::intersect(const Ray &r, Intersection *isect) const
-					{
-					  // Part 1, Task 3:
-					  // implement ray-triangle intersection. When an intersection takes
-					  // place, the Intersection data should be updated accordingly
-					  Vector3D e1 = p2 - p1;
-					  Vector3D e2 = p3 - p1;
-					  Vector3D s = r.o - p1;
-				
-					  Vector3D s1 = cross(r.d, e2);
-					  Vector3D s2 = cross(s, e1);
-				
-					  double div = dot(s1, e1);
-					  double t = dot(s2, e2) / div;
-					  double b1 = dot(s1, s) / div;
-					  double b2 = dot(s2, r.d) / div;
-					  double b3 = 1 - b1 - b2;
-				
-					  if (div == 0)
-						return false;
-				
-					  if (t < r.min_t || t > r.max_t)
-						return false;
-					  if (b1 < 0 || b1 > 1)
-						return false;
-					  if (b2 < 0 || b2 > 1)
-						return false;
-					  if (b3 < 0 || b3 > 1)
-						return false;
-				
-					  isect->t = t;
-					  r.max_t = t;
-					  isect->primitive = this;
-					  isect->bsdf = get_bsdf();
-					  isect->n = b1 * n1 + b2 * n2 + b3 * n3;
-				
-					  return true;
-					}		
-				</code>
-			</pre>  
-
-			<h3>Show images with normal shading for a few small .dae files.</h3>
-			
-			<br></br>
-
-
-
-				<br><br>
-				<img src="CBbunny.png" width="450">
-				<br><br>
-				<img src="CBcoil.png" width="450">
-				<br><br>
-				<img src="CBlucy.png" width="450">
-				<br><br>
+		
+		<h3>Show images with normal shading for a few small .dae files.</h3>
+			<img src="CBbunny.png" width="450">
+			<br><br>
+			<img src="CBcoil.png" width="450">
+			<br><br>
+			<img src="CBlucy.png" width="450">
+			<br><br>
 
 	<h2>Part 2: Bounding Volume Hierarchy</h2>
+		<h3>Walk through your BVH construction algorithm. Explain the heuristic you chose for picking the splitting point.</h3>
+			A BVH is an acceleration structure used to improve rendering performance by reducing the number of ray-primitive intersection tests that need to be performed. It works by recursively subdividing the scene into bounding volumes that contain the primitives in the scene. The BVH is constructed by repeatedly subdividing the bounding volume into two smaller volumes, until a certain termination criterion is reached.
+			Once the BVH is constructed, the renderer can use it to quickly identify which bounding volumes are potentially intersected by a given ray, and test only the primitives that are contained in those volumes. This is done by traversing the BVH tree starting at the root, and recursively testing whether the ray intersects the bounding volume of each internal node. If the ray does not intersect the bounding volume, the entire subtree rooted at that node can be skipped. If the ray does intersect the bounding volume, the traversal continues down to the child nodes, until a leaf node containing a set of primitives is reached. At that point, the renderer tests each primitive in the leaf node to determine whether it intersects the ray.
+		<h3>Show images with normal shading for a few large .dae files that you can only render with BVH acceleration.</h3>
+			<img src="maxplanck.png" width="450">
+			<br><br>
+			<img src="peter.png" width="450">
+			<br><br>
+		<h3>Compare rendering times on a few scenes with moderately complex geometries with and without BVH acceleration. Present your results in a one-paragraph analysis.</h3>
+			Rendering runtime speedup with BVH:
+			cow.dae 5.6316s → 0.0385s
+			beetle.dae 8.3990s → 0.0370s
+			teapot.dae 2.1325s → 0.0415s
+			maxplanck.dae 75.1357s → 0.0460s
+			By using a BVH, the number of ray-primitive intersection tests can be greatly reduced, especially in scenes with many primitives. For example, in a scene with a large flat plane and many small objects scattered across it, most rays will not intersect the plane, and a BVH can be used to quickly skip the entire plane when testing those rays. Similarly, in a scene with many overlapping objects, a BVH can be used to quickly skip entire groups of objects that are occluded by other objects.
+		
 	<h2>Part 3: Direct Illumination</h2>
+		<h3>Walk through both implementations of the direct lighting function.</h3>
+			The estimate_direct_lighting_hemisphere function estimates the lighting from a given intersection coming directly from a light source by uniformly sampling a hemisphere. It first constructs a coordinate system at the hit point with the normal vector aligned with the Z direction. Then, it calculates the outgoing direction of the ray and generates a number of samples, for each of which it generates a new ray in a random direction in the hemisphere around the hit point. For each new ray, it checks if it intersects any object in the scene before it reaches a light source, and if so, it calculates the reflectance of the surface at the hit point and multiplies it by the emission of the intersected object, weighted by the cosine of the angle between the normal and the incoming ray. Finally, it averages the accumulated radiance across all the samples to estimate the direct lighting.
+			The estimate_direct_lighting_importance function estimates the lighting from a given intersection coming directly from a light source by importance sampling. This function is very similar to estimate_direct_lighting_hemisphere, but instead of uniformly sampling a hemisphere, it samples light sources in the scene. It first generates a number of samples equal to the number of light sources in the scene times a predefined constant ns_area_light, and for each sample, it selects a random point on a randomly selected light source and generates a ray from the hit point to that point. It then checks if the ray intersects any object in the scene before it reaches the light source, and if so, it calculates the reflectance of the surface at the hit point and multiplies it by the emission of the intersected object, weighted by the inverse square of the distance between the hit point and the light source. Finally, it averages the accumulated radiance across all the samples to estimate the direct lighting.
+		<h3>Images rendered with both implementations of the direct lighting function.</h3>
+			<h4>Image rendered with 1 light ray using light sampling</h4>
+			<img src="bunny_64_32_LS.png" width="450">
+			<h4>Image rendered with 4 light ray using light sampling</h4>
+			<img src="bunny_64_32_LS2.png" width="450">
+			<h4>Image rendered with 16 light ray using light sampling</h4>
+			<img src="bunny_64_32_LS3.png" width="450">
+			<h4>Image rendered with 64 light ray using light sampling</h4>
+			<img src="bunny_64_32_LS4.png" width="450">
+			<br><br>
+			<h4>Image rendered with 1 light ray using uniform hemisphere sampling</h4>
+			<img src="CBbunny_H_16_8.png" width="450">
+			<h4>Image rendered with 4 light ray using uniform hemisphere sampling</h4>
+			<img src="CBbunny_H_16_8 2.png" width="450">
+			<h4>Image rendered with 16 light ray using uniform hemisphere sampling</h4>
+			<img src="CBbunny_H_16_8 3.png" width="450">
+			<h4>Image rendered with 64 light ray using uniform hemisphere sampling</h4>
+			<img src="CBbunny_H_16_8 4.png" width="450">
+			Uniform hemisphere sampling samples points on a hemisphere centered around the surface normal, while lighting sampling only samples points on the surface of light sources in the scene. The advantage of uniform hemisphere sampling is its simplicity and ease of implementation, as well as its ability to capture indirect lighting effects. However, it can lead to a significant amount of noise and inaccuracy in areas of the scene that are not well lit. Lighting sampling, on the other hand, is a more accurate and efficient method for estimating direct lighting since it only samples from light sources, but it requires more complicated implementation and can potentially miss some light sources. In practice, a combination of both techniques is often used to achieve a balance between efficiency and accuracy.
+
 	<h2>Part 4: Global Illumination</h2>
 
-		<h3>Images rendered with global (direct and indirect) illumination at 1024 samples per pixel.</h3>
+		<h3>Walk through your implementation of the indirect lighting function.</h3>
+			In order to implement indirect lighting we first need to compute the indirect light that is being emitted from the objects in our scene. This is accomplished by using global illumination which simulates the way light bounces around a scene to create indirect lighting. Monte Carlo integration involves shooting rays from the camera into the scene and tracing them as they bounce around until they eventually hit a light source or reach a maximum number of bounces. This process generates a set of samples that we can use to estimate the indirect lighting in each pixel of our image. 
+			Once we have computed the indirect lighting samples, we can use them to perform the final step of rendering our scene. THis involves adding the direct lighting and the indirect lighting together to get the final color of each pixel. We can also use the indirect lighting samples to perform other effects such as ambient occlusion or soft shadows. The quality of our image will depend on the number of samples we use for both direct and indirect lighting, as well as the complexity of our scene and the materials used on the objects. 
 
+		<h3>Images rendered with global (direct and indirect) illumination at 1024 samples per pixel.</h3>
 			<br><br>
 			<img src="4-1-banana.png" width="450">
 			<br><br>
@@ -218,29 +110,52 @@
 		
 		<h3>Bunny at 1024 samples per pixel and various levels of maximum ray depth</h3>
 			<h4>Image rendered with maximum ray depth set to 0</h4>
+			<img src="CBbunny_task4.png" width="450">
 			<h4>Image rendered with maximum ray depth set to 1</h4>
+			<img src="CBbunny_task4 2.png" width="450">
 			<h4>Image rendered with maximum ray depth set to 2</h4>
+			<img src="CBbunny_task4 3.png" width="450">
 			<h4>Image rendered with maximum ray depth set to 3</h4>
+			<img src="CBbunny_task4 4.png" width="450">
 			<h4>Image rendered with maximum ray depth set to 100</h4>
+			<img src="CBbunny_task4 5.png" width="450">
+
 		<h3>Images with 4 light rays and various sample-per-pixel rates</h3>
 			<h4>Image rendered with sample-per-pixel rate set to 1</h4>
+			<img src="dragon_task4.png" width="450">
 			<h4>Image rendered with sample-per-pixel rate set to 2</h4>
+			<img src="dragon_task4 2.png" width="450">
 			<h4>Image rendered with sample-per-pixel rate set to 4</h4>
+			<img src="dragon_task4 3.png" width="450">
 			<h4>Image rendered with sample-per-pixel rate set to 8</h4>
+			<img src="dragon_task4 4.png" width="450">
 			<h4>Image rendered with sample-per-pixel rate set to 16</h4>
+			<img src="dragon_task4 5.png" width="450">
 			<h4>Image rendered with sample-per-pixel rate set to 64</h4>
+			<img src="dragon_task4 6.png" width="450">
 			<h4>Image rendered with sample-per-pixel rate set to 1024</h4>
+			<img src="dragon_task4 7.png" width="450">
+
 	
 	<h2>Part 5: Adaptive Sampling</h2>
 		<h3>Intro to adaptive sampling</h3>
-
+			Adaptive sampling is a technique to improve the efficiency of the path tracing algorithm. It is based on the idea that some regions of the image may require more samples than others to produce a noise-free result. Therefore, instead of using the same number of samples per pixel for the entire image, adaptive sampling adjusts the number of samples for each pixel based on an estimate of the variance of the pixel color. In other words, pixels that have high variance will receive more samples than pixels with low variance.
 		<h3>Our implementation</h3>
+		The implementation involves generating a set of initial points using a random sampling approach. The function then evaluates the function values at these points and sorts them in descending order based on their function values. The function then selects the top k points based on a given percentage value and creates a new set of points around these selected points using a Gaussian distribution. The function then evaluates the function values at these new points and appends them to the list of initial points. This process is repeated until a maximum number of iterations is reached or the difference in the function values between two consecutive iterations falls below a specified threshold. The adaptive sampling approach ensures that more points are sampled in regions with high function values and fewer points in regions with low function values, which helps to improve the accuracy of the function approximation while minimizing the number of function evaluations. 
 
 		<h3>Images demonstrating adaptive sampling</h3>
 			<h4>Bunny</h4>
+			<img src="bunny_task5.png" width="450">
+			<img src="bunny_rate.png" width="450">
+
 			<h4>Spheres</h4>
+			<img src="CBspheres_lambertian.png" width="450">
+			<img src="CBspheres_lambertian_rate.png" width="450">
+
 
 	<h2>Collaboration statement</h2>
+	We each took on different parts of the project, but made sure to stay updated on each other's progress and provide support whenever necessary. When we encountered difficulties or had questions, we utilized Ed to reach out to each other and get the clarification needed to move forward. Overall, we thoroughly enjoyed working on this project together and learned a great deal about the importance of effective collaboration in achieving success. We believe that our ability to communicate openly and work together efficiently allowed us to produce a high-quality final product that we are both happy with. We also went to a project party which helped figure out some edge cases we weren't considering. 
+
 
     <h2>Link</h2>
     Link to write-up: <a href="https://zacharyzollman.github.io/cs184-proj-webpage/proj3-1/index.html">https://zacharyzollman.github.io/cs184-proj-webpage/proj3-1/index.html</a>
