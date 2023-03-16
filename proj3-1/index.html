@@ -168,7 +168,8 @@
 			<img src="CBbunny_task4 4.png" width="450">
 			<h4>Image rendered with maximum ray depth set to 100</h4>
 			<img src="CBbunny_task4 5.png" width="450">
-			For CBbunny by increasing max ray depth we see that shadows get softer and the level of gradient change in lighting is less with each additional depth as the more bounces occur the brighter the shadows become as they include environmental secondary lighting. The effect of this is realized by the blue and red light tones being imposed onto the bunny as light that bounces from the walls is being included in the rendering. 
+			<br><br>
+			For CBbunny, by increasing max ray depth, we see that shadows get softer and the level of gradient change in lighting is less with each additional depth as the more bounces occur the brighter the shadows become as they include environmental secondary lighting. The effect of this is realized by the blue and red light tones being imposed onto the bunny as light that bounces from the walls is being included in the rendering. 
 
 
 		<h3>Images with 4 light rays and various sample-per-pixel rates</h3>
@@ -192,7 +193,7 @@
 		<h3>Intro to adaptive sampling</h3>
 			Adaptive sampling is a technique to improve the efficiency of the path tracing algorithm. It is based on the idea that some regions of the image may require more samples than others to produce a noise-free result. Therefore, instead of using the same number of samples per pixel for the entire image, adaptive sampling adjusts the number of samples for each pixel based on an estimate of the variance of the pixel color. In other words, pixels that have high variance will receive more samples than pixels with low variance.
 		<h3>Our implementation</h3>
-		The implementation involves generating a set of initial points using a random sampling approach. The function then evaluates the function values at these points and sorts them in descending order based on their function values. The function then selects the top k points based on a given percentage value and creates a new set of points around these selected points using a Gaussian distribution. The function then evaluates the function values at these new points and appends them to the list of initial points. This process is repeated until a maximum number of iterations is reached or the difference in the function values between two consecutive iterations falls below a specified threshold. The adaptive sampling approach ensures that more points are sampled in regions with high function values and fewer points in regions with low function values, which helps to improve the accuracy of the function approximation while minimizing the number of function evaluations. 
+		The implementation involves keeping track of the sum of the illuminance and the illuminance squared for all of the samples, which we can do by adding this value to the value of a variable with each iteration of our sampling loop. Using these sums, we can periodically calculate metrics that reflect how consistent our result has been and how many samples we have taken. When the results are highly consistent, we don't need as many samples, so we can break out of the sampling loop. Implementing this logic essentially involves counter variables, sum variables, and some algebra. We can then store the number of actual samples we took; this allows us to visualize the differences in sample sizes in different regions of the image, as seen below.
 		<br></br>
 		When testing my initial implementation for this part, I noticed that the rate image was all a solid color. I looked on Ed and saw people commenting that you should check that you are using appropriate variable types and doing your math correctly. It took me a few passes to spot it, but eventually I realized that I was neglecting to convert from variance to standard deviation. After correcting this and adjusting some of the numeric variable’s types, the rate image had variation, as expected.
 		<br></br>
@@ -208,7 +209,7 @@
 
 
 	<h2>Collaboration statement</h2>
-	We each took on different parts of the project, but made sure to stay updated on each other's progress and provide support whenever necessary. When we encountered difficulties or had questions, we utilized Ed to reach out to each other and get the clarification needed to move forward. Overall, we thoroughly enjoyed working on this project together and learned a great deal about the importance of effective collaboration in achieving success. We believe that our ability to communicate openly and work together efficiently allowed us to produce a high-quality final product that we are both happy with. We also went to a project party which helped figure out some edge cases we weren't considering. 
+	We each took on different parts of the project, but made sure to stay updated on each other's progress and provide support whenever necessary. When we encountered difficulties or had questions, we utilized Ed to reach out to students and staff and get clarification in order to move forward. Overall, we thoroughly enjoyed working on this project together and learned a great deal about the importance of effective collaboration in achieving success. We believe that our ability to communicate openly and work together efficiently allowed us to produce a high-quality final product that we are both happy with. We also went to a project party, which helped us identify some ways to improve our code. 
 
 
     <h2>Link</h2>
