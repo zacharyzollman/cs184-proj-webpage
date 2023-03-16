@@ -151,6 +151,8 @@
 			<br><br>
 			<img src="4-2-spheres-indirect.png" width="450">
 			<br><br>
+			The indirect and direct lighting scheme provide two images that are both incomplete. The one that is direct lighting has harsh shadows as the light bouncing off the walls and objects in the scene is not considering internal bouncing of the light before it reaches the camera. Vice versa is true for direct illumination. The two can be taken in combination to render an image that is accurate to real world lighting. 
+
 
 		
 		<h3>Bunny at 1024 samples per pixel and various levels of maximum ray depth</h3>
@@ -164,6 +166,8 @@
 			<img src="CBbunny_task4 4.png" width="450">
 			<h4>Image rendered with maximum ray depth set to 100</h4>
 			<img src="CBbunny_task4 5.png" width="450">
+			For CBbunny by increasing max ray depth we see that shadows get softer and the level of gradient change in lighting is less with each additional depth as the more bounces occur the brighter the shadows become as they include environmental secondary lighting. The effect of this is realized by the blue and red light tones being imposed onto the bunny as light that bounces from the walls is being included in the rendering. 
+
 
 		<h3>Images with 4 light rays and various sample-per-pixel rates</h3>
 			<h4>Image rendered with sample-per-pixel rate set to 1</h4>
