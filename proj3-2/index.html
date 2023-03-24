@@ -45,6 +45,7 @@
 			<img src="img/1-spheres/m5.png" width="480">
 			<h4>Below image rendered with maximum ray depth set to 100</h4>
 			<img src="img/1-spheres/m100.png" width="480">
+			<br><br>
             Your response goes here.
 			<code>-t 256 -s 512 -l 8 -m 100 -r 480 360 -f "CBspheres.png" ../dae/sky/CBspheres.dae</code>
         </p>
@@ -67,9 +68,19 @@
 
         <h3 align="middle">Part 2. Microfacet Material</h3>
         <p><b>
-            Show a screenshot sequence of 4 images of scene `CBdragon_microfacet_au.dae` rendered with $\alpha$ set to 0.005, 0.05, 0.25 and 0.5. The other settings should be at least 128 samples per pixel and 1 samples per light. The number of bounces should be at least 5. Describe the differences between different images. Note that, to change the $\alpha$, just open the .dae file and search for `microfacet`.
+            Show a screenshot sequence of 4 images of scene `CBdragon_microfacet_au.dae` rendered with α set to 0.005, 0.05, 0.25 and 0.5. The other settings should be at least 128 samples per pixel and 1 samples per light. The number of bounces should be at least 5. Describe the differences between different images. Note that, to change the α, just open the .dae file and search for `microfacet`.
         </b></p>
         <p>
+			<h4>Below image rendered with α set to 0.005</h4>
+			<img src="img/2-dragon/0.005.png" width="480">
+			<h4>Below image rendered with α set to 0.05</h4>
+			<img src="img/2-dragon/0.05.png" width="480">
+			<h4>Below image rendered with α set to 0.25</h4>
+			<img src="img/2-dragon/0.25.png" width="480">
+			<h4>Below image rendered with α set to 0.5</h4>
+			<img src="img/2-dragon/0.5.png" width="480">
+			<br><br>
+			<code>-t 128 -s 512 -l 4 -m 8 -r 480 360 -f "dragon_microfacet.png" ../dae/sky/CBdragon_microfacet_au.dae</code>
             Your response goes here.
         </p>
         <br>
@@ -77,6 +88,12 @@
             Show two images of scene `CBbunny_microfacet_cu.dae` rendered using cosine hemisphere sampling (default) and your importance sampling. The sampling rate should be fixed at 64 samples per pixel and 1 samples per light. The number of bounces should be at least 5. Briefly discuss their difference.
         </b></p>
         <p>
+			<h4>Below image rendered with cosine hemisphere sampling</h4>
+			<img src="img/2-bunny/hemisphere.png" width="480">
+			<h4>Below image rendered with our importance sampling</h4>
+			<img src="img/2-bunny/importance.png" width="480">
+			<br><br>
+			<code>-t 128 -s 64 -l 1 -m 8 -r 480 360 -f "bunny_microfacet.png" ../dae/sky/CBbunny_microfacet_cu.dae</code>
             Your response goes here.
         </p>
         <br>
