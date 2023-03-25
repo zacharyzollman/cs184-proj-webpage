@@ -21,7 +21,19 @@
 
     <div class="padded">
 
-        
+        In this assignment, we added features to PathTracer, our rendering tool that implements ray tracing. 
+		Specifically, we added the capability to render mirror, glass, and microfacet materials.
+		<br><br>
+		We encountered some challenges while completing this assignment. 
+		For our initial implementation of mirror and glass materials, the glass sphere we tried to render showed up as solid black. 
+		We ended up rewriting <code>GlassBSDF::sample_f()</code>, which resolved the issue. 
+		The initial version of this function did not calculate η correctly, and likely had other issues.
+		<br><br>
+		Similarly, when we tried to render a bunny using our initial implementation of the microfacet material rendering feature, the bunny reflected the overhead light as expected, but was otherwise solid black. 
+		There were also black dots scattered throughout the image. 
+		I went through the code and realized that we were not checking whether the values of <code>wi</code> and <code>wo</code> were valid. 
+		After adding these checks, the black dots disappeared. We then got a response to a comment we made on EdStem, which suggested that our <code>wi</code> calculation may be flawed. Indeed, we were not reflecting our wo appropriately. Once I fixed this, the bunny was no longer solid black.
+
 
         <h3 align="middle">Part 1. Mirror and Glass Materials</h3>
 
