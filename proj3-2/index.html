@@ -111,8 +111,12 @@
 			<h4>Below image rendered with α set to 0.5</h4>
 			<img src="img/2-dragon/0.5.png" width="480">
 			<br><br>
+			Here is the command that was used to generate these images: 
 			<code>-t 128 -s 512 -l 4 -m 8 -r 480 360 -f "dragon_microfacet.png" ../dae/sky/CBdragon_microfacet_au.dae</code>
-            Your response goes here.
+            The alpha parameter controls the roughness or smoothness of the material's surface, with lower values indicating a smoother surface and higher values indicating a rougher surface.
+			<br><br>
+			In the first image with α = 0.005, the surface appears very smooth and reflective, causing the reflections of the wall behind it to appear very shiny and distorted. However, the areas of the surface facing directly at the camera appear to be missing some detail, possibly due to the high reflectivity causing overexposure. In the second image with α = 0.05, the surface still appears smooth and reflective, but with greater detail and evenness in the reflection changes. The reflections of the wall still appear distorted but with more clarity and definition. In the third image with α = 0.25, the surface appears much softer in appearance, with a more matte-like finish that still reflects the colors of the wall, but with a much softer light. The surface appears to have detail across the entire image, with a few dark shadows, likely due to the increase in roughness. In the fourth image with α = 0.5, the surface appears much softer in reflection with the entire image being lit up and having no hard shadows. The surface is less shiny and more diffused in its changes in reflection, likely due to the high roughness value.
+
         </p>
         <br>
         <p><b>
@@ -127,7 +131,7 @@
 			Here is the command that was used to generate these images: 
 			<code>-t 128 -s 64 -l 1 -m 8 -r 480 360 -f "bunny_microfacet.png" ../dae/sky/CBbunny_microfacet_cu.dae</code>
             <br><br>
-			Using cosine hemisphere sampling, the material’s surface has dark areas with heavy graininess/noise across the entire object. Due to these dark areas, the bunny stands out strongly against the background (which is not microfacet material). This noisiness makes sense since hemisphere sampling is much less efficient; many more samples are needed to get a similarly realistic result.
+			Using cosine hemisphere sampling, the material’s surface has dark areas with heavy graininess/noise across the entire object. Due to these dark areas, the bunny stands out strongly against the background (which is not microfacet material). This noisiness makes sense since hemisphere sampling is much less efficient; many more samples are needed in order to converge to a similarly realistic result.
 			In contrast, importance sampling produces an image with a clear reflection on the bunny with little noise. The edges of the objects are much easier to see in the reflection in the image produced with importance sampling due to the smaller relative amount of noise.
         </p>
         <br>
@@ -135,7 +139,7 @@
             Show at least one image with some other conductor material, replacing `eta` and `k`. Note that you should look up values for real data rather than modifying them arbitrarily. Tell us what kind of material your parameters correspond to.
         </b></p>
         <p>
-			All of the below images were rendered with values from https://refractiveindex.info using the following command: <code>-t 128 -s 1024 -l 4 -m 8 -r 480 360 -f "dragon_microfacet_alternate_material.png" ../dae/sky/CBdragon_microfacet_au.dae</code>
+			All of the below images were rendered with values from <a href="https://refractiveindex.info">refractiveindex.info</a> using the following command: <code>-t 128 -s 1024 -l 4 -m 8 -r 480 360 -f "dragon_microfacet_alternate_material.png" ../dae/sky/CBdragon_microfacet_au.dae</code>
 			<h4>Below image rendered with <code>eta</code> and <code>k</code> values for Zirconium</h4>
 			<img src="img/2-materials/zirconium.png" width="480">
 			<br><br>
