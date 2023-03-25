@@ -98,6 +98,16 @@
 
 
         <h3 align="middle">Part 2. Microfacet Material</h3>
+
+		<code>MicrofacetBSDF::f()</code> implements the microfacet model for computing the bidirectional reflectance distribution function (BRDF) of a surface. The function takes in two vectors <code>wo</code> and <code>wi</code>, which represent the outgoing and incoming directions of light, respectively. The function first checks if either wo or wi is facing away from the surface, and if so, returns zero as the BRDF value. Otherwise, the function computes the half vector <code>h</code> as the sum of <code>wo</code> and <code>wi</code>, normalized to unit length. It then computes the BRDF value using the Fresnel term F(wi), the shadowing-masking function <code>G(wo, wi)</code>, and the normal distribution function <code>D(h)</code>. Finally, the function returns the computed BRDF value.
+		<br><br>
+		<code>MicrofacetBSDF::D()</code> computes the Beckmann normal distribution function (NDF), which defines how the microfacets are distributed on the surface. The function takes in a vector <code>h</code>, which represents the half vector, and computes the NDF value using the Beckmann distribution formula. The function returns the computed NDF value.
+		<br><br>
+		<code>MicrofacetBSDF::F()</code> computes the Fresnel term for reflection on a dielectric-conductor interface. The function takes in a vector <code>wi</code>, which represents the incoming direction of light, and computes the Fresnel term using the equations for the reflection coefficients <code>R_s</code> and <code>R_p</code>. These coefficients depend on η, the ratio of old and new refractive indices, and k, the extinction coefficient of the material, which are represented as a <code>Vector3D</code>. The function returns the computed Fresnel term.
+		<br><br>
+		<code>MicrofacetBSDF::sample_f()</code> implements importance sampling of the Beckmann NDF to sample the incoming direction of light <code>wi</code> and compute the corresponding BRDF value. The function computes <code>h</code> using <code>theta_h</code> and <code>phi_h</code>, and then computes <code>wi</code> by reflecting <code>wo</code> about <code>h</code>. It then computes the BRDF value using the microfacet model formula in the <code>f</code> function. Finally, the function computes the probability density function (PDF) for sampling wi and sets pdf parameters to the computed value. The function returns the computed BRDF values.
+
+
         <p><b>
             Show a screenshot sequence of 4 images of scene `CBdragon_microfacet_au.dae` rendered with α set to 0.005, 0.05, 0.25 and 0.5. The other settings should be at least 128 samples per pixel and 1 samples per light. The number of bounces should be at least 5. Describe the differences between different images. Note that, to change the α, just open the .dae file and search for `microfacet`.
         </b></p>
