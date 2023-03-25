@@ -32,10 +32,21 @@
 		Similarly, when we tried to render a bunny using our initial implementation of the microfacet material rendering feature, the bunny reflected the overhead light as expected, but was otherwise solid black. 
 		There were also black dots scattered throughout the image. 
 		I went through the code and realized that we were not checking whether the values of <code>wi</code> and <code>wo</code> were valid. 
-		After adding these checks, the black dots disappeared. We then got a response to a comment we made on EdStem, which suggested that our <code>wi</code> calculation may be flawed. Indeed, we were not reflecting our wo appropriately. Once I fixed this, the bunny was no longer solid black.
+		After adding these checks, the black dots disappeared. We then got a response to a comment we made on EdStem, which suggested that our <code>wi</code> calculation may be flawed. Indeed, we were not reflecting our <code>wo</code> appropriately. Once I fixed this, the bunny was no longer solid black.
 
 
         <h3 align="middle">Part 1. Mirror and Glass Materials</h3>
+
+		<code>BSDF::reflect()</code> calculates a reflected vector; it negates the x and y components of the incident direction vector <code>wo</code> and copies the z component to obtain the reflection direction, which is then stored in the pointer wi.
+		<br><br>
+		<code>MirrorBSDF::sample_f()</code> calls the reflect function with the incident direction <code>wo</code> to obtain the reflection direction wi. It sets the PDF to 1 since the probability of reflecting is 1 for a perfect mirror. It then returns the reflectance divided by the absolute cosine of the reflection direction, which is obtained by computing the dot product of the reflection direction and the surface normal and taking the absolute value.
+		<br><br>
+		<code>BSDF::refract()</code> calculates a direction of refraction for a provided direction vector and index of refraction using Snell’s law.
+		<br><br>
+		<code>RefractionBSDF::sample_f()</code> calculates <code>wi</code> using <code>refract()</code>, sets the PDF to 1, and returns a value for radiance.
+		<br><br>
+		<code>GlassBSDF::sample_f()</code> first checks for total internal reflection. This is the simplest case, and results in us taking the same actions as in MirrorBSDF::sample_f(). If total internal reflection does not occur, then we compute Schlick’s approximation of the ratio of reflection energy to refraction energy. We then “flip a coin” with a probability of heads based on this ratio. If true, we call <code>reflect()</code> to obtain the direction wi, set PDF to the ratio value, and return the ratio value times the same return value we calculated in the total internal reflection case. If false, we call <code>refract()</code> to obtain the direction wi, set the PDf to one minus the ratio value, and return a more complicated value for radiance.
+
 
         <p><b>
             Show a sequence of six images of scene `CBspheres.dae` rendered with `max_ray_depth` set to 0, 1, 2, 3, 4, 5, and 100. The other settings should be at least 64 samples per pixel and 4 samples per light. Make sure to include all screenshots.
