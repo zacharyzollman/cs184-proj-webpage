@@ -124,8 +124,11 @@
 			<h4>Below image rendered with our importance sampling</h4>
 			<img src="img/2-bunny/importance.png" width="480">
 			<br><br>
+			Here is the command that was used to generate these images: 
 			<code>-t 128 -s 64 -l 1 -m 8 -r 480 360 -f "bunny_microfacet.png" ../dae/sky/CBbunny_microfacet_cu.dae</code>
-            Your response goes here.
+            <br><br>
+			Using cosine hemisphere sampling, the material’s surface has dark areas with heavy graininess/noise across the entire object. Due to these dark areas, the bunny stands out strongly against the background (which is not microfacet material). This noisiness makes sense since hemisphere sampling is much less efficient; many more samples are needed to get a similarly realistic result.
+			In contrast, importance sampling produces an image with a clear reflection on the bunny with little noise. The edges of the objects are much easier to see in the reflection in the image produced with importance sampling due to the smaller relative amount of noise.
         </p>
         <br>
         <p><b>
