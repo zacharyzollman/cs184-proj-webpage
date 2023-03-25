@@ -70,6 +70,10 @@
             Here is an example of a command that was used to generate these images (only the maximum ray depth value was adjusted between images):
 			<code>-t 256 -s 512 -l 8 -m 100 -r 480 360 -f "CBspheres.png" ../dae/sky/CBspheres.dae</code>
 			<br><br>
+			<b>
+			Point out the new multibounce effects that appear in each image. Explain how these bounce numbers relate to the particular effects that appear. Make sure to include all screenshots.
+			</b>
+			<br><br>
 			The images show the scene <code>CBspheres.dae</code> rendered with different values of the <code>max_ray_depth</code> parameter. This parameter determines the maximum number of times a ray can bounce off a surface before it is terminated. A value of 0 means that only the rays that go directly from an object to the camera are considered (so no bouncing occurs), while higher values allow for more complex reflections.
 			<br><br>
 			In the first image, with <code>max_ray_depth</code> set to 0, we only see the direct illumination between the light source and the camera. 
@@ -88,7 +92,7 @@
 			<br><br>
 			At the sixth image, with <code>max_ray_depth</code> set to 5, we can see that the image is brighter, likely due to more rays reflecting around the scene. Some of these could be those that were refracted by the glass sphere, bounced off the ground, and then bounced off other parts of the scene.
 			<br><br>
-			In the final image, with <code>max_ray_depth</code> set to 100, we can see some bright areas at the top of the glass sphere. This makes sense, because light that was refracted by the glass sphere, reflected off of the ground and into the glass sphere, and then refracted by the glass sphere should be reflected in the image when we consider this many bounces.
+			In the seventh of the seven images, with <code>max_ray_depth</code> set to 100, we can see some bright areas at the top of the glass sphere. This makes sense, because light that was refracted by the glass sphere, reflected off of the ground and into the glass sphere, and then refracted by the glass sphere should be reflected in the image when we consider this many bounces.
 			<br><br>
 			Overall, as we continued to increase the value of <code>max_ray_depth</code>, the image became more and more detailed, with more accurate lighting and reflections. In the later images, we can see fine details such as the texture of the metal sphere. However, as we increase <code>max_ray_depth</code> beyond a certain point, we start to see diminishing returns in terms of image quality, as the additional complexity may not be noticeable.
 
