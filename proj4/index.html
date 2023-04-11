@@ -204,6 +204,7 @@
       </table>
     </div>
     
+    
     <blockquote><b>
       <small>
         What about for <code>damping</code>?
@@ -211,9 +212,58 @@
     </b></blockquote>
 
     <p>
-      TODO
+      There wasn't very much difference between the resting positions of the cloth for the values of damping that I tried. This makes sense because the only forces were gravity and the pinned masses, which were all constant.
     </p>
 
+    <div align="middle">
+      <table style="width:100%">
+        <tr align="center">
+          <td>
+            <img src="img/2/damping/0.045977.png" align="middle" width="300vw" />
+            <figcaption>Damping: 0.045977</figcaption>
+          </td>
+          <td>
+            <img src="img/2/damping/0.200000.png" align="middle" width="300vw" />
+            <figcaption>Damping: 0.200000 (Default value)</figcaption>
+          </td>
+          <td>
+            <img src="img/2/damping/0.804598.png" align="middle" width="300vw" />
+            <figcaption>Damping: 0.804598</figcaption>
+          </td>
+          <td>
+        </tr>
+      </table>
+    </div>
+
+    <p>
+      However, the behavior of the cloth was very different once it was released from its starting position. At higher values, the force was highly dampened, so the speed was slow and steady. the cloth fell, fairly uniformly, toward its resting position and stayed there. In contrast, with the lower dampening value, the cloth fell faster and swung back and forth before staying in its resting spot. This makes sense if we consider that the damping force represents friction; an object facing less friction <i>would</i> move faster and swing back and forth more. There was also more of a ripple/dapple/flutter type of pattern on the falling cloth, which makes sense because it would have less uniform forces acting on it if the energy from its motion had more of an effect (rather than almost exclusively gravity and the pinned masses).
+    </p>
+
+    <div align="middle">
+      <table style="width:100%">
+        <tr align="center">
+          <td>
+            <img src="img/2/damping/0.045977-falling.png" align="middle" width="400vw" />
+            <figcaption>Damping: 0.045977</figcaption>
+          </td>
+          <td>
+            <img src="img/2/damping/0.804598-falling.png" align="middle" width="400vw" />
+            <figcaption>Damping: 0.804598</figcaption>
+          </td>
+          <td>
+        </tr>
+      </table>
+    </div>
+    
+    <p>
+      Below we can observe more of the aforementioned rippling. Thw image also demonstrates the swinging behavior of the cloth with this damping value.
+    </p>
+
+    <div align="middle">
+      <img src="img/2/damping/0.045977-falling-upswing.png" align="middle" width="400vw" />
+      <figcaption>Damping: 0.045977</figcaption>
+    </div>
+    
 
     <blockquote><b>
       <small>
