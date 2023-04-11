@@ -150,7 +150,7 @@
     </b></blockquote>
 
     <p>
-      When the spring constant is higher, there is greater spring force, so the cloth is more rigid. When the constant is lower, it is more limp. With the falling cloth, this is particularly visible in the degree of curvature and bendin at the top of the cloth, between the two pinned points.
+      When the spring constant is higher, there is greater spring force, so the cloth is more rigid. When the constant is lower, it is more limp. With the falling cloth, this is particularly visible in the degree of curvature and bendin at the top of the cloth, between the two pinned points. I also noticed that there is some bending of the cloth closer to cloth's vertical edges at the default <code>ks</code> value, but not at the other values. At the higher <code>ks</code> value, it is probably too rigid to allow such deformation, while at the lower value, it may be so loose that all of the deformation occurs near the top and doesn't propagate elsewhere in the cloth. I also notice that the cloth flares out a bit at the bottom at the low spring constant value. This makes sense because there is less spring force holding the cloth in a rectangle, so the stretching at the top can propagate to curving at the bottom as well.
     </p>
 
     <div align="middle">
@@ -181,9 +181,28 @@
     </b></blockquote>
 
     <p>
-      TODO
+      As with <code>ks</code>, altering the value for density also most noticeably changes the appearance at the top of the cloth, between the two pinned edges. In this case, increasing density increases the effect of gravitational force, so there appears to be greater deformation of the cloth at higher values for density. At the high density value, the curvature at the top is at its greatest, the deformation along the sides that we see with default values is absent, and there is some flaring out at the bottom. At the low density value, the curvature at the top is the most gradual, the deformation along the sides that we see with default values is similarly absent, and there isn't any flaring out at the bottom.
     </p>
     
+    <div align="middle">
+      <table style="width:100%">
+        <tr align="center">
+          <td>
+            <img src="img/2/density/1.5.png" align="middle" width="300vw" />
+            <figcaption>Density: 1.5 g/cm^2</figcaption>
+          </td>
+          <td>
+            <img src="img/2/density/15.png" align="middle" width="300vw" />
+            <figcaption>Density: 15 g/cm^2 (Default value)</figcaption>
+          </td>
+          <td>
+            <img src="img/2/density/150.png" align="middle" width="300vw" />
+            <figcaption>Density: 150 g/cm^2</figcaption>
+          </td>
+          <td>
+        </tr>
+      </table>
+    </div>
     
     <blockquote><b>
       <small>
