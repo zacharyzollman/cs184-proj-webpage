@@ -531,7 +531,10 @@
     </div>
 
     <p>
-      TODO
+      Bump mapping only changes the coloration, while displacement mapping also changes the geometry of the objects. This is evident in the above images; the sphere with bump mapping is still a perfect-seeming sphere, while the one with displacement mapping is only approximately spherical. It has ridges and valleys on its surface that correspond to the color variation that is displayed in both bump and displacement mapping.
+      <br><br>
+      Adjusting the coarseness affects the relative smoothness of bump- and displacement-mapped spheres. With a coarser mesh, the sphere with bump mapping no longer appears to be perfect. As a result, the bump and displacement versions look more similar to each other than they did with the previous parameters. With the finer mesh, the sphere appears to be perfect under bump mapping, while it is clearly rougher under displacement mapping. Also, the displacement more clearly corresponds to the (shade-based) texture on the surface with the finer mesh, which makes sense because there are more vertices to displace and thus there is more potential for finer-scale variation.
+      
     </p>
 
 
@@ -543,11 +546,11 @@
       <table style="width:100%">
         <tr align="center">
           <td>
-            <img src="img/t5-mirror-shader-cloth.png" align="middle" width="400vw" />
+            <img src="img/5/mirror1.png" align="middle" width="400vw" />
             <figcaption>Mirror Shader on the Cloth</figcaption>
           </td>
           <td>
-            <img src="img/t5-mirror-shader-sphere.png" align="middle" width="400vw" />
+            <img src="img/5/mirror2.png" align="middle" width="400vw" />
             <figcaption>Mirror Shader on the Sphere</figcaption>
           </td>
           <td>
@@ -581,7 +584,7 @@
     </div>
 
     <p>
-      I was interested in the idea of creating something involving colorful gradients. The "Normal" shading option already did something like this, so I was curious about how I could use other values to accomplish something similar. I played around and noticed that the tangent provided some nice color gradients. However, it didn't vary along a plane, so I added the x- and y-coordinates from <code>v_uv</code>. This introduced variation along a plane, as desired. I then observed that the boundaries of the fallen cloth were 
+      I was interested in the idea of creating something involving colorful gradients. The "Normal" shading option already did something like this, so I was curious about how I could use other values to accomplish something similar. I played around and noticed that the tangent provided some nice color gradients. However, it didn't vary along a plane, so I added the x- and y-coordinates from <code>v_uv</code>. This introduced variation along a plane, as desired. I then added a little bit of the normal back in, for further color variation to better differentiate different surfaces.
     </p>
 
 
@@ -592,7 +595,7 @@
   </p>
   <br />
   <p>
-    Partner B worked on TODO.
+    Ali implemented Parts 1 and 4, and helped debug Part 5.
   </p>
 
 
