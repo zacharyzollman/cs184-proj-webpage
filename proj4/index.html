@@ -79,11 +79,11 @@
       Give a high-level overview of what you implemented in this project. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the project.
     </b></blockquote>
     <p>
-      In this project, we implemented a real-time simulation of cloth using a mass and spring based system. We built the data structures to discretely represent the cloth, defined and applied physical constraints on them. We also implemented collisions with other objects as well as self-collisions to prevent cloth clipping. Finally, we used shaders to render the cloth with realistic lighting and shading effects.
+      In this project, we implemented a real-time simulation of cloth using a mass and spring based system. We built the data structures to discretely represent the cloth, and defined and applied physical constraints on them. We also implemented collisions with other objects as well as self-collisions to prevent cloth clipping. Finally, we used shaders to render the cloth with realistic lighting and shading effects.
     </p><p>
-      Some of the interesting things we learned from completing the project are: How to use different types of springs to model the elasticity and rigidity of cloth. How to handle collisions with other objects using spatial hashing and impulse-based response. How to handle self-collisions using hierarchical bounding boxes and collision constraints. How to use vertex and fragment shaders to implement Phong shading, normal mapping, and shadow mapping for the cloth.
+      Some of the interesting things we learned from completing the project are: How to use different types of springs to model the elasticity and rigidity of cloth. How to adjust the positions of masses in the cloth to simulate collisions with other objects. How to handle self-collisions using spatial hashing and collision constraints. How vertex and fragment shader programs work in general. How to use shader programs to implement diffuse shading, Blinn-Phong shading, texture mapping, bump mapping, displacement mapping, and environment-mapped reflections for the cloth.
     </p><p>
-      We enjoyed this project because it allowed me to create realistic and interactive simulations of cloth that can respond to various forces and environments. We also learned a lot about the physics and mathematics behind cloth simulation and how to optimize the performance and accuracy of the simulation.
+      We enjoyed this project because it allowed us to create realistic and interactive simulations of cloth that can respond to various forces and environments. We also learned a lot about the physics and mathematics behind cloth simulation and how to optimize the performance and accuracy of the simulation.
     </p>
   </div>
 
@@ -404,8 +404,8 @@
     </div>
 
     <p>
-    By changing the density or of the cloth it alters the weight it has, which in turn alters the amount of force it has to resist folding. When the density is low, the cloth is light and can fold easily. When the density is high, the cloth is heavy and can't fold as easily due to force to resist folding. 
-	  The same is true for the spring constant. When the spring constant is low, the cloth can fold easily. When the spring constant is high, the cloth can't fold as easily due to force to resist folding.
+    By changing the density or of the cloth it alters the weight it has, which in turn alters the amount of force it has to resist folding. When the density is low, the cloth is light and can fold easily. When the density is high, the cloth is heavy and can't fold as easily due to force resisting folding. 
+	  The same is true for the spring constant. When the spring constant is low, the cloth can fold easily. When the spring constant is high, the cloth can't fold as easily due to force to resistance to folding.
     </p>
 
 
