@@ -79,7 +79,11 @@
       Give a high-level overview of what you implemented in this project. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the project.
     </b></blockquote>
     <p>
-      TODO
+      In this project, we implemented a real-time simulation of cloth using a mass and spring based system. We built the data structures to discretely represent the cloth, defined and applied physical constraints on them. We also implemented collisions with other objects as well as self-collisions to prevent cloth clipping. Finally, we used shaders to render the cloth with realistic lighting and shading effects.
+    </p><p>
+      Some of the interesting things we learned from completing the project are: How to use different types of springs to model the elasticity and rigidity of cloth. How to handle collisions with other objects using spatial hashing and impulse-based response. How to handle self-collisions using hierarchical bounding boxes and collision constraints. How to use vertex and fragment shaders to implement Phong shading, normal mapping, and shadow mapping for the cloth.
+    </p><p>
+      We enjoyed this project because it allowed me to create realistic and interactive simulations of cloth that can respond to various forces and environments. We also learned a lot about the physics and mathematics behind cloth simulation and how to optimize the performance and accuracy of the simulation.
     </p>
   </div>
 
@@ -95,14 +99,14 @@
       <table style="width:100%">
         <tr align="center">
           <td>
-            <img src="images/t1-zoomed-in_p2.png" align="middle" width="300vw" />
+            <img src="images/1/wireframe1.png" align="middle" width="300vw" />
           </td>
           <td>
-            <img src="images/t1-init_p2.png" align="middle" width="300vw" />
+            <img src="images/1/wireframe2.png" align="middle" width="300vw" />
             <figcaption>Initial configuration ($\text{ks} = 5,000$)</figcaption>
           </td>
           <td>
-            <img src="images/t1-zoomed-out_p2.png" align="middle" width="300vw" />
+            <img src="images/1/wireframe3.png" align="middle" width="300vw" />
           </td>
           <td>
         </tr>
@@ -350,15 +354,15 @@
       <table style="width:100%">
         <tr align="center">
           <td>
-            <img src="images/t4-collision-1.png" align="middle" width="300vw" />
+            <img src="images/4/collision1.png" align="middle" width="300vw" />
             <figcaption>Self collision 1</figcaption>
           </td>
           <td>
-            <img src="images/t4-collision-2.png" align="middle" width="300vw" />
+            <img src="images/4/collision2.png" align="middle" width="300vw" />
             <figcaption>Self collision 2</figcaption>
           </td>
           <td>
-            <img src="images/t4-collision-3.png" align="middle" width="300vw" />
+            <img src="images/4/collision3.png" align="middle" width="300vw" />
             <figcaption>Self collision 3</figcaption>
           </td>
           <td>
@@ -377,30 +381,31 @@
       <table style="width:100%">
         <tr align="center">
           <td>
-              <img src="images/t4-density-1.png" align="middle" width="400px" />
+              <img src="images/4/density1.png" align="middle" width="400px" />
               <figcaption>$\text{density} = 1$</figcaption>
               
           </td>
           <td>
-              <img src="images/t4-density-2.png" align="middle" width="400px" />
+              <img src="images/4/density2.png" align="middle" width="400px" />
               <figcaption>$\text{density} = 50$</figcaption>
           </td>
         </tr>
         <tr align="center">
           <td>
-              <img src="images/t4-ks-1.png" align="middle" width="400px" />
+              <img src="images/4/ks1.png" align="middle" width="400px" />
               <figcaption>$\text{ks} = 1,000$</figcaption>
           </td>
           <td>
-              <img src="images/t4-ks-2.png" align="middle" width="400px" />
-              <figcaption>$\text{ks} = 7,500$</figcaption>
+              <img src="images/4/ks2.png" align="middle" width="400px" />
+              <figcaption>$\text{ks} = 10,000$</figcaption>
           </td>
         </tr>
       </table>
     </div>
 
     <p>
-      TODO
+    By changing the density or of the cloth it alters the weight it has, which in turn alters the amount of force it has to resist folding. When the density is low, the cloth is light and can fold easily. When the density is high, the cloth is heavy and can't fold as easily due to force to resist folding. 
+	  The same is true for the spring constant. When the spring constant is low, the cloth can fold easily. When the spring constant is high, the cloth can't fold as easily due to force to resist folding.
     </p>
 
 
